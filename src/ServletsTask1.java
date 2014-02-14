@@ -1,6 +1,5 @@
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ServletsTask1 extends HttpServlet {
 
