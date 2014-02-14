@@ -1,15 +1,21 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ServletsTask1 extends HttpServlet {
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-	private static final long serialVersionUID = -3764767856748158770L;
+public class ServletsTask1 extends HttpServlet
+{
 
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	private static final long	serialVersionUID	= -3764767856748158770L;
+
+	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
+
 		res.setContentType("text/html");
-		
-		PrintWriter out = res.getWriter();
-		
+		PrintWriter out= res.getWriter();
 		out.println("<html>");
 		out.println("<head><title>Lab 3 Part 1</title></head>");
 		out.println("<body><form method=\"post\">");
@@ -21,9 +27,5 @@ public class ServletsTask1 extends HttpServlet {
 		out.println("<input type=\"checkbox\" name=\"c\">C<br>");
 		out.println("<input type=\"checkbox\" name=\"cpp\">C++<br>");
 		out.println("<input type=\"checkbox\" name=\"csharp\">C#<br>");
-		
-		
-		
 	}
-	
 }
