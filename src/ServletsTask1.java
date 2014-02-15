@@ -18,7 +18,7 @@ public class ServletsTask1 extends HttpServlet
 		PrintWriter out= res.getWriter();
 		out.println("<html>");
 		out.println("<head><title>Lab 3 Part 1</title></head>");
-		out.println("<body><form method=\"post\">");
+		out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 		out.println("<h2>Your name</h2>");
 		out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
 		out.println("Last name: <input type=\"text\" name=\"lastname\">");
