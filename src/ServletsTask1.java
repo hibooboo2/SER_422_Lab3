@@ -14,6 +14,10 @@ public class ServletsTask1 extends HttpServlet
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setDateHeader("Expires", 0);
 		res.setContentType("text/html");
 		PrintWriter out= res.getWriter();
 		out.println("<html>");
