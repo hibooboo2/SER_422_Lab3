@@ -31,6 +31,7 @@ public class ServletsTask1 extends HttpServlet
 		out.println("<input type=\"checkbox\" name=\"php\">PHP<br>");
 		out.println("<input type=\"checkbox\" name=\"perl\">Perl<br>");
 		out.println("<input type=\"checkbox\" name=\"python\">Python<br>");
+		out.println("<input type=\"checkbox\" name=\"js\">JavaScript<br>");
 		out.println("<input type=\"checkbox\" name=\"scala\">Scala<br>");
 		out.println("<input type=\"checkbox\" name=\"scheme\">Scheme<br>");
 		out.println("<input type=\"checkbox\" name=\"prolog\">Prolog<br>");
