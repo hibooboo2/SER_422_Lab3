@@ -41,6 +41,9 @@ public class ServletsTask1 extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.addHeader("Pragma", "no-cache");
+		res.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
 		PrintWriter out= response.getWriter();
 		try
