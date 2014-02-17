@@ -47,7 +47,10 @@ public class ServletsTask1 extends HttpServlet {
 		{
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
-			out.println("<head><title>Lab 3 Part 1</title></head>");
+			out.println("<head>");
+			out.println("<title>Lab 3 Part 1</title>");
+			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your name</h2>");
 			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
