@@ -12,4 +12,8 @@
 			<param-value>/resources/userFile.save</param-value>
 		</init-param>
 	</servlet>
+	 <servlet-mapping>
+    <servlet-name>ServletsTask1</servlet-name>
+    <url-pattern>/servlet/*</url-pattern>
+  </servlet-mapping>
 </web-app>
