@@ -86,27 +86,27 @@ public class ServletsTask1 extends HttpServlet
 			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
 			out.println("<h2>Programming languages you know</h2>");
-			out.println("<input type=\"checkbox\" name=\"java\">Java<br>");
-			out.println("<input type=\"checkbox\" name=\"c\">C<br>");
-			out.println("<input type=\"checkbox\" name=\"cpp\">C++<br>");
-			out.println("<input type=\"checkbox\" name=\"objc\">Objective-C<br>");
-			out.println("<input type=\"checkbox\" name=\"csharp\">C#<br>");
-			out.println("<input type=\"checkbox\" name=\"php\">PHP<br>");
-			out.println("<input type=\"checkbox\" name=\"perl\">Perl<br>");
-			out.println("<input type=\"checkbox\" name=\"python\">Python<br>");
-			out.println("<input type=\"checkbox\" name=\"js\">JavaScript<br>");
-			out.println("<input type=\"checkbox\" name=\"scala\">Scala<br>");
-			out.println("<input type=\"checkbox\" name=\"scheme\">Scheme<br>");
-			out.println("<input type=\"checkbox\" name=\"prolog\">Prolog<br>");
-			out.println("<input type=\"checkbox\" name=\"otherlang\">Other");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other");
 			out.println("<h2>Days of the week you can meet</h2>");
-			out.println("<input type=\"checkbox\" name=\"sun\">Sunday<br>");
-			out.println("<input type=\"checkbox\" name=\"mon\">Monday<br>");
-			out.println("<input type=\"checkbox\" name=\"tue\">Tuesday<br>");
-			out.println("<input type=\"checkbox\" name=\"wed\">Wednesday<br>");
-			out.println("<input type=\"checkbox\" name=\"thu\">Thursday<br>");
-			out.println("<input type=\"checkbox\" name=\"fri\">Friday<br>");
-			out.println("<input type=\"checkbox\" name=\"sat\">Saturday");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday");
 			out.println("<h2>Your favorite color</h2>");
 			out.println("<input type=\"text\" name=\"favcolor\"><br>");
 			out.println("<input type=\"submit\" value=\"Submit\">");
@@ -132,6 +132,17 @@ public class ServletsTask1 extends HttpServlet
 		res.setDateHeader("Expires", -1);
 		res.setContentType("text/html");
 		Map<String,String[]> formData= req.getParameterMap();
+		UserContainer userCont= null;
+		try
+		{
+			userCont= UserContainer.getContainer("Users.saved");
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			res.sendError(500);
+		}
+		userCont.addUser(new User(formData));
 		PrintWriter out= res.getWriter();
 		try
 		{

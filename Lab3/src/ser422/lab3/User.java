@@ -1,6 +1,7 @@
 
 package ser422.lab3;
 
+import java.util.Map;
 import java.util.Vector;
 
 public class User
@@ -32,6 +33,24 @@ public class User
 		this.languages= languages;
 		this.days= days;
 		this.color= color;
+	}
+
+	public User(Map<String,String[]> formMap)
+	{
+
+		this.fName= formMap.get("firstname")[0];
+		this.lName= formMap.get("lastname")[0];
+		this.languages= new Vector<String>();
+		for (int i= 0; i < formMap.get("langs").length; i++)
+		{
+			languages.add(formMap.get("langs")[i]);
+		}
+		this.days= new Vector<String>();
+		for (int i= 0; i < formMap.get("days").length; i++)
+		{
+			days.add(formMap.get("days")[i]);
+		}
+		this.color= formMap.get("color")[0];
 	}
 
 	/**
