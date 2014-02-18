@@ -55,6 +55,7 @@ public class ServletsTask1 extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
+		Map<String,String[]> query= request.getParameterMap();
 		PrintWriter out= response.getWriter();
 		try
 		{
@@ -65,6 +66,7 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			out.println("Here is your query:" + query.get("fname")[0]);
 			out.println("<h2>Your name</h2>");
 			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
