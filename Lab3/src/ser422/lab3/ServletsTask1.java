@@ -4,6 +4,7 @@ package ser422.lab3;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -56,6 +57,17 @@ public class ServletsTask1 extends HttpServlet
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
 		Map<String,String[]> query= request.getParameterMap();
+		UserContainer userCont= null;
+		try
+		{
+			userCont= UserContainer.getContainer("Users.saved");
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			response.sendError(500);
+		}
+		Vector<User> validUsers= userCont.queryUsers(query);
 		PrintWriter out= response.getWriter();
 		try
 		{
@@ -66,7 +78,10 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("Here is your query:" + query.get("fname")[0]);
+			for (User u : validUsers)
+			{
+				out.println(u.toString());
+			}
 			out.println("<h2>Your name</h2>");
 			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
@@ -97,6 +112,7 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
+
 		}
 		finally
 		{

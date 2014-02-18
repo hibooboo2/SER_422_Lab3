@@ -128,4 +128,16 @@ public class User
 
 		this.color= color;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return "User [fName=" + this.fName + ", lName=" + this.lName + ", languages=" + this.languages + ", days=" + this.days + ", color="
+				+ this.color + "]";
+	}
 }

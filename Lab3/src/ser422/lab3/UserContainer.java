@@ -13,12 +13,27 @@ import java.util.Vector;
 public class UserContainer
 {
 
-	Vector<User>	users;
-
-	public void writeToFile(String fileLocation) throws IOException
+	/**
+	 * @param users
+	 * @param fileLocation
+	 */
+	public UserContainer(Vector<User> users, String fileLocation)
 	{
 
-		File userFile= new File(fileLocation);
+		super();
+		this.users= users;
+		this.setFileLocation(fileLocation);
+	}
+
+	private final Vector<User>	users;
+
+	private String			fileLocation;
+
+
+	public void writeToFile() throws IOException
+	{
+
+		File userFile= new File(this.fileLocation);
 		if (!userFile.exists())
 		{
 			userFile.createNewFile();
@@ -29,19 +44,20 @@ public class UserContainer
 		oos.close();
 	}
 
-	public static Vector<User> getAllusers(String fileLocation) throws IOException, ClassNotFoundException
+	public static UserContainer getContainer(String fileLocation) throws IOException, ClassNotFoundException
 	{
-
-		Vector<User> users= new Vector<User>();
-		FileInputStream fin= new FileInputStream(fileLocation);
-		ObjectInputStream ois= new ObjectInputStream(fin);
-		User user= null;
-		while ((user= (User) ois.readObject()) != null)
+		File userFile= new File(fileLocation);
+		UserContainer userCont= null;
+		if (userFile.exists())
 		{
-			users.add(user);
+			FileInputStream fin= new FileInputStream(fileLocation);
+			ObjectInputStream ois= new ObjectInputStream(fin);
+			userCont= (UserContainer) ois.readObject();
+			ois.close();
+		}else {
+			userCont= new UserContainer((new Vector<User>()), fileLocation);
 		}
-		ois.close();
-		return users;
+		return userCont;
 	}
 
 	public Vector<User> findFname(String fName)
@@ -140,5 +156,45 @@ public class UserContainer
 			desiredUsers.addAll(this.findColor(color));
 		}
 		return this.users;
+	}
+
+	/**
+	 * @return the users
+	 */
+	public Vector<User> getUsers()
+	{
+
+		return this.users;
+	}
+
+	/**
+	 * @param user
+	 *            add User to the list of users.
+	 */
+	public void addUser(User user)
+	{
+		if (!this.users.contains(user))
+		{
+			this.users.add(user);
+		}
+	}
+
+	/**
+	 * @return the fileLocation
+	 */
+	public String getFileLocation()
+	{
+
+		return this.fileLocation;
+	}
+
+	/**
+	 * @param fileLocation
+	 *            the fileLocation to set
+	 */
+	public void setFileLocation(String fileLocation)
+	{
+
+		this.fileLocation= fileLocation;
 	}
 }
