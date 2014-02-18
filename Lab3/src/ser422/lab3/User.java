@@ -14,16 +14,16 @@ public class User
 
 	private Vector<String>	days;
 
-	private Vector<String>	colors;
+	private String			color;
 
 	/**
 	 * @param fName
 	 * @param lName
 	 * @param languages
 	 * @param days
-	 * @param colors
+	 * @param color
 	 */
-	public User(String fName, String lName, Vector<String> languages, Vector<String> days, Vector<String> colors)
+	public User(String fName, String lName, Vector<String> languages, Vector<String> days, String color)
 	{
 
 		super();
@@ -31,7 +31,7 @@ public class User
 		this.lName= lName;
 		this.languages= languages;
 		this.days= days;
-		this.colors= colors;
+		this.color= color;
 	}
 
 	/**
@@ -113,19 +113,19 @@ public class User
 	/**
 	 * @return the colors
 	 */
-	public Vector<String> getColors()
+	public String getColor()
 	{
 
-		return this.colors;
+		return this.color;
 	}
 
 	/**
 	 * @param colors
 	 *            the colors to set
 	 */
-	public void setColors(Vector<String> colors)
+	public void setColor(String color)
 	{
 
-		this.colors= colors;
+		this.color= color;
 	}
 }
