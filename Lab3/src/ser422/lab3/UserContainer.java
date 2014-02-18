@@ -53,7 +53,6 @@ public class UserContainer
 
 	public Vector<User> findLname(String lName)
 	{
-
 		return this.users;
 
 	}
