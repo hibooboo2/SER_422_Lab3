@@ -53,7 +53,15 @@ public class UserContainer
 
 	public Vector<User> findLname(String lName)
 	{
-		return this.users;
+
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users) {
+			if (u.getfName().contains(lName))
+			{
+				validUsers.add(u);
+			}
+		}
+		return validUsers;
 
 	}
 
@@ -67,20 +75,54 @@ public class UserContainer
 	public Vector<User> findDays(String[] days)
 	{
 
-		return this.users;
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			for (int i= 0; i < days.length; i++)
+			{
+				if (u.getDays().contains(days[i]))
+				{
+					validUsers.add(u);
+				}
+			}
+		}
+		return validUsers;
 
 	}
 
 	public Vector<User> findColor(String color)
 	{
 
-		return this.users;
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			if (u.getColor().equalsIgnoreCase(color))
+			{
+				validUsers.add(u);
+			}
+		}
+		return validUsers;
 
 	}
 
 	public Vector<User> queryUsers(Map<String,String[]> query)
 	{
 
+		Vector<User> desiredUsers= new Vector<User>();
+		for (String fName : query.get("fName"))
+		{
+			desiredUsers.addAll(this.findFname(fName));
+		}
+		for (String lName : query.get("lName"))
+		{
+			desiredUsers.addAll(this.findFname(lName));
+		}
+		desiredUsers.addAll(this.findLanguages(query.get("langs")));
+		desiredUsers.addAll(this.findLanguages(query.get("days")));
+		for (String color : query.get("color"))
+		{
+			desiredUsers.addAll(this.findColor(color));
+		}
 		return this.users;
 	}
 }
