@@ -41,10 +41,11 @@ public class UserContainer {
 
 	public Vector<User> findFname(String fName) {
 		Vector<User> matchedUsers = new Vector<User>();
-		for (User u : users) {
+		for (User u : this.users) {
 			if (u.getfName().contains(fName))
-				;
-			matchedUsers.add(u);
+			{
+				matchedUsers.add(u);
+			}
 		}
 		return matchedUsers;
 
@@ -67,7 +68,7 @@ public class UserContainer {
 
 	public Vector<User> findLanguages(String[] langs) {
 		Vector<User> matchedUsers = new Vector<User>();
-		for (User u : users) {
+		for (User u : this.users) {
 			Vector<String> userLangs = u.getLanguages();
 			for (int i = 0; i < langs.length; i++) {
 				if (userLangs.contains(langs[i])) {
