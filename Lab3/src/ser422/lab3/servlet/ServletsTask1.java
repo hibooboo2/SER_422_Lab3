@@ -1,0 +1,500 @@
+
+package ser422.lab3.servlet;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class ServletsTask1
+ */
+@WebServlet("/ServletsTask1")
+public class ServletsTask1 extends HttpServlet
+{
+
+	private static final long	serialVersionUID	= 1L;
+
+	private static String		_filename			= null;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ServletsTask1()
+	{
+
+		super();
+	}
+
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException
+	{
+
+		super.init(config);
+		_filename= config.getInitParameter("userFile");
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+
+		ServletContext sc= this.getServletContext();
+		//sc.getResource(_filename).openConnection().getOutputStream();
+		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.addHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", -1);
+		response.setContentType("text/html");
+		Map<String,String[]> query= request.getParameterMap();
+		UserContainer userCont= null;
+		try
+		{
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			response.sendError(500);
+		}
+		Vector<User> validUsers= userCont.queryUsers(query);
+		PrintWriter out= response.getWriter();
+		try
+		{
+			out.println("<!DOCTYPE html>");
+			out.println("<html>");
+			out.println("<head>");
+			out.println("<title>Lab 3 Part 1</title>");
+			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+			out.println("</head>");
+			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			for (User u : validUsers)
+			{
+				out.println(u.toString());
+			}
+			out.println("<h2>Your name</h2>");
+			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
+			out.println("Last name: <input type=\"text\" name=\"lastname\">");
+			out.println("<h2>Programming languages you know</h2>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other");
+			out.println("<h2>Days of the week you can meet</h2>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday");
+			out.println("<h2>Your favorite color</h2>");
+			out.println("<input type=\"text\" name=\"favcolor\"><br>");
+			out.println("<input type=\"submit\" value=\"Submit\">");
+			out.println("</form></body>");
+			out.println("</html>");
+
+		}
+		finally
+		{
+			out.close();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
+
+		ServletContext sc= this.getServletContext();
+		res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.addHeader("Pragma", "no-cache");
+		res.setDateHeader("Expires", -1);
+		res.setContentType("text/html");
+		Map<String,String[]> formData= req.getParameterMap();
+		UserContainer userCont= null;
+		try
+		{
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			res.sendError(500);
+		}
+		userCont.addUser(new User(formData));
+		userCont.writeToFile(sc.getResource(_filename).openConnection().getOutputStream());
+		PrintWriter out= res.getWriter();
+		try
+		{
+
+			out.println("POST~!<BR> ");
+			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
+
+		}
+		finally
+		{
+			out.close();
+		}
+	}
+}
+class User
+{
+
+	private String			fName;
+
+	private String			lName;
+
+	private Vector<String>	languages;
+
+	private Vector<String>	days;
+
+	private String			color;
+
+	/**
+	 * @param fName
+	 * @param lName
+	 * @param languages
+	 * @param days
+	 * @param color
+	 */
+	public User(String fName, String lName, Vector<String> languages, Vector<String> days, String color)
+	{
+
+		super();
+		this.fName= fName;
+		this.lName= lName;
+		this.languages= languages;
+		this.days= days;
+		this.color= color;
+	}
+
+	public User(Map<String,String[]> formMap)
+	{
+
+		this.fName= formMap.get("firstname")[0];
+		this.lName= formMap.get("lastname")[0];
+		this.languages= new Vector<String>();
+		for (int i= 0; i < formMap.get("langs").length; i++)
+		{
+			this.languages.add(formMap.get("langs")[i]);
+		}
+		this.days= new Vector<String>();
+		for (int i= 0; i < formMap.get("days").length; i++)
+		{
+			this.days.add(formMap.get("days")[i]);
+		}
+		this.color= formMap.get("color")[0];
+	}
+
+	/**
+	 * @return the fName
+	 */
+	public String getfName()
+	{
+
+		return this.fName;
+	}
+
+	/**
+	 * @param fName
+	 *            the fName to set
+	 */
+	public void setfName(String fName)
+	{
+
+		this.fName= fName;
+	}
+
+	/**
+	 * @return the lName
+	 */
+	public String getlName()
+	{
+
+		return this.lName;
+	}
+
+	/**
+	 * @param lName
+	 *            the lName to set
+	 */
+	public void setlName(String lName)
+	{
+
+		this.lName= lName;
+	}
+
+	/**
+	 * @return the languages
+	 */
+	public Vector<String> getLanguages()
+	{
+
+		return this.languages;
+	}
+
+	/**
+	 * @param languages
+	 *            the languages to set
+	 */
+	public void setLanguages(Vector<String> languages)
+	{
+
+		this.languages= languages;
+	}
+
+	/**
+	 * @return the days
+	 */
+	public Vector<String> getDays()
+	{
+
+		return this.days;
+	}
+
+	/**
+	 * @param days
+	 *            the days to set
+	 */
+	public void setDays(Vector<String> days)
+	{
+
+		this.days= days;
+	}
+
+	/**
+	 * @return the colors
+	 */
+	public String getColor()
+	{
+
+		return this.color;
+	}
+
+	/**
+	 * @param colors
+	 *            the colors to set
+	 */
+	public void setColor(String color)
+	{
+
+		this.color= color;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return "User [fName=" + this.fName + ", lName=" + this.lName + ", languages=" + this.languages + ", days=" + this.days + ", color="
+				+ this.color + "]";
+	}
+}
+
+class UserContainer
+{
+
+	/**
+	 * @param users
+	 */
+	public UserContainer(Vector<User> users)
+	{
+
+		super();
+		this.users= users;
+	}
+
+	private final Vector<User>	users;
+
+	private String			fileLocation;
+
+
+	public void writeToFile(OutputStream outputStream) throws IOException
+	{
+		ObjectOutputStream oos= new ObjectOutputStream(outputStream);
+		oos.writeObject(this);
+		oos.close();
+	}
+
+	public static UserContainer getContainer(InputStream inputStream) throws IOException, ClassNotFoundException
+	{
+		UserContainer userCont= null;
+		InputStream fin= inputStream;
+		ObjectInputStream ois= new ObjectInputStream(fin);
+		userCont= (UserContainer) ois.readObject();
+		ois.close();
+
+		return userCont;
+	}
+
+	public Vector<User> findFname(String fName)
+	{
+
+		Vector<User> matchedUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			if (u.getfName().contains(fName))
+			{
+				matchedUsers.add(u);
+			}
+		}
+		return matchedUsers;
+	}
+
+	public Vector<User> findLname(String lName)
+	{
+
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			if (u.getfName().contains(lName))
+			{
+				validUsers.add(u);
+			}
+		}
+		return validUsers;
+	}
+
+	public Vector<User> findLanguages(String[] langs)
+	{
+
+		Vector<User> matchedUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			Vector<String> userLangs= u.getLanguages();
+			for (int i= 0; i < langs.length; i++)
+			{
+				if (userLangs.contains(langs[i]))
+				{
+					matchedUsers.add(u);
+				}
+			}
+		}
+		return matchedUsers;
+	}
+
+	public Vector<User> findDays(String[] days)
+	{
+
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			for (int i= 0; i < days.length; i++)
+			{
+				if (u.getDays().contains(days[i]))
+				{
+					validUsers.add(u);
+				}
+			}
+		}
+		return validUsers;
+	}
+
+	public Vector<User> findColor(String color)
+	{
+
+		Vector<User> validUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			if (u.getColor().equalsIgnoreCase(color))
+			{
+				validUsers.add(u);
+			}
+		}
+		return validUsers;
+	}
+
+	public Vector<User> queryUsers(Map<String,String[]> query)
+	{
+
+		Vector<User> desiredUsers= new Vector<User>();
+		for (String fName : query.get("fName"))
+		{
+			desiredUsers.addAll(this.findFname(fName));
+		}
+		for (String lName : query.get("lName"))
+		{
+			desiredUsers.addAll(this.findFname(lName));
+		}
+		desiredUsers.addAll(this.findLanguages(query.get("langs")));
+		desiredUsers.addAll(this.findLanguages(query.get("days")));
+		for (String color : query.get("color"))
+		{
+			desiredUsers.addAll(this.findColor(color));
+		}
+		return this.users;
+	}
+
+	/**
+	 * @return the users
+	 */
+	public Vector<User> getUsers()
+	{
+
+		return this.users;
+	}
+
+	/**
+	 * @param user
+	 *            add User to the list of users.
+	 */
+	public void addUser(User user)
+	{
+		if (!this.users.contains(user))
+		{
+			this.users.add(user);
+		}
+	}
+
+	/**
+	 * @return the fileLocation
+	 */
+	public String getFileLocation()
+	{
+
+		return this.fileLocation;
+	}
+
+	/**
+	 * @param fileLocation
+	 *            the fileLocation to set
+	 */
+	public void setFileLocation(String fileLocation)
+	{
+
+		this.fileLocation= fileLocation;
+	}
+}
+
