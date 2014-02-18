@@ -1,12 +1,11 @@
 
 package ser422.lab3;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Vector;
 
@@ -15,14 +14,12 @@ public class UserContainer
 
 	/**
 	 * @param users
-	 * @param fileLocation
 	 */
-	public UserContainer(Vector<User> users, String fileLocation)
+	public UserContainer(Vector<User> users)
 	{
 
 		super();
 		this.users= users;
-		this.setFileLocation(fileLocation);
 	}
 
 	private final Vector<User>	users;
@@ -30,16 +27,9 @@ public class UserContainer
 	private String			fileLocation;
 
 
-	public void writeToFile() throws IOException
+	public void writeToFile(OutputStream outputStream) throws IOException
 	{
-
-		File userFile= new File(this.fileLocation);
-		if (!userFile.exists())
-		{
-			userFile.createNewFile();
-		}
-		FileOutputStream fout= new FileOutputStream(userFile);
-		ObjectOutputStream oos= new ObjectOutputStream(fout);
+		ObjectOutputStream oos= new ObjectOutputStream(outputStream);
 		oos.writeObject(this);
 		oos.close();
 	}

@@ -132,6 +132,7 @@ public class ServletsTask1 extends HttpServlet
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 
+		ServletContext sc= this.getServletContext();
 		res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.addHeader("Pragma", "no-cache");
 		res.setDateHeader("Expires", -1);
@@ -140,7 +141,7 @@ public class ServletsTask1 extends HttpServlet
 		UserContainer userCont= null;
 		try
 		{
-			userCont= UserContainer.getContainer("Users.saved");
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -148,6 +149,7 @@ public class ServletsTask1 extends HttpServlet
 			res.sendError(500);
 		}
 		userCont.addUser(new User(formData));
+		userCont.writeToFile(sc.getResource(_filename).openConnection().getOutputStream());
 		PrintWriter out= res.getWriter();
 		try
 		{
