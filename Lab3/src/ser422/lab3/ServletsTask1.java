@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +23,8 @@ public class ServletsTask1 extends HttpServlet
 {
 
 	private static final long	serialVersionUID	= 1L;
+
+	private static String		_filename			= null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -42,6 +45,7 @@ public class ServletsTask1 extends HttpServlet
 
 		// TODO Auto-generated method stub
 		super.init(config);
+		_filename= config.getInitParameter("userFile");
 	}
 
 	/**
@@ -51,7 +55,8 @@ public class ServletsTask1 extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 
-		// TODO Auto-generated method stub
+		ServletContext sc= this.getServletContext();
+		sc.getResource(_filename).openConnection().getOutputStream();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
@@ -60,7 +65,7 @@ public class ServletsTask1 extends HttpServlet
 		UserContainer userCont= null;
 		try
 		{
-			userCont= UserContainer.getContainer("Users.saved");
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
 		}
 		catch (ClassNotFoundException e)
 		{

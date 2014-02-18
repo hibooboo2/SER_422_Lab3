@@ -2,9 +2,9 @@
 package ser422.lab3;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
@@ -44,19 +44,14 @@ public class UserContainer
 		oos.close();
 	}
 
-	public static UserContainer getContainer(String fileLocation) throws IOException, ClassNotFoundException
+	public static UserContainer getContainer(InputStream inputStream) throws IOException, ClassNotFoundException
 	{
-		File userFile= new File(fileLocation);
 		UserContainer userCont= null;
-		if (userFile.exists())
-		{
-			FileInputStream fin= new FileInputStream(fileLocation);
-			ObjectInputStream ois= new ObjectInputStream(fin);
-			userCont= (UserContainer) ois.readObject();
-			ois.close();
-		}else {
-			userCont= new UserContainer((new Vector<User>()), fileLocation);
-		}
+		InputStream fin= inputStream;
+		ObjectInputStream ois= new ObjectInputStream(fin);
+		userCont= (UserContainer) ois.readObject();
+		ois.close();
+
 		return userCont;
 	}
 
