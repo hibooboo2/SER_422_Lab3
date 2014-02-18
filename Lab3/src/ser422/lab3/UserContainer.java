@@ -1,3 +1,4 @@
+
 package ser422.lab3;
 
 import java.io.File;
@@ -9,78 +10,88 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.Vector;
 
-public class UserContainer {
+public class UserContainer
+{
 
-	Vector<User> users;
+	Vector<User>	users;
 
-	public void writeToFile(String fileLocation) throws IOException {
+	public void writeToFile(String fileLocation) throws IOException
+	{
 
-		File userFile = new File(fileLocation);
-		if (!userFile.exists()) {
+		File userFile= new File(fileLocation);
+		if (!userFile.exists())
+		{
 			userFile.createNewFile();
 		}
-		FileOutputStream fout = new FileOutputStream(userFile);
-		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		FileOutputStream fout= new FileOutputStream(userFile);
+		ObjectOutputStream oos= new ObjectOutputStream(fout);
 		oos.writeObject(this);
 		oos.close();
 	}
 
-	public static Vector<User> getAllusers(String fileLocation)
-			throws IOException, ClassNotFoundException {
+	public static Vector<User> getAllusers(String fileLocation) throws IOException, ClassNotFoundException
+	{
 
-		Vector<User> users = new Vector<User>();
-		FileInputStream fin = new FileInputStream(fileLocation);
-		ObjectInputStream ois = new ObjectInputStream(fin);
-		User user = null;
-		while ((user = (User) ois.readObject()) != null) {
+		Vector<User> users= new Vector<User>();
+		FileInputStream fin= new FileInputStream(fileLocation);
+		ObjectInputStream ois= new ObjectInputStream(fin);
+		User user= null;
+		while ((user= (User) ois.readObject()) != null)
+		{
 			users.add(user);
 		}
 		ois.close();
 		return users;
 	}
 
-	public Vector<User> findFname(String fName) {
-		Vector<User> matchedUsers = new Vector<User>();
-		for (User u : this.users) {
+	public Vector<User> findFname(String fName)
+	{
+
+		Vector<User> matchedUsers= new Vector<User>();
+		for (User u : this.users)
+		{
 			if (u.getfName().contains(fName))
 			{
 				matchedUsers.add(u);
 			}
 		}
 		return matchedUsers;
-
 	}
-
 
 	public Vector<User> findLname(String lName)
 	{
 
 		Vector<User> validUsers= new Vector<User>();
-		for (User u : this.users) {
+		for (User u : this.users)
+		{
 			if (u.getfName().contains(lName))
 			{
 				validUsers.add(u);
 			}
 		}
 		return validUsers;
-
 	}
 
-	public Vector<User> findLanguages(String[] langs) {
-		Vector<User> matchedUsers = new Vector<User>();
-		for (User u : this.users) {
-			Vector<String> userLangs = u.getLanguages();
-			for (int i = 0; i < langs.length; i++) {
-				if (userLangs.contains(langs[i])) {
+	public Vector<User> findLanguages(String[] langs)
+	{
+
+		Vector<User> matchedUsers= new Vector<User>();
+		for (User u : this.users)
+		{
+			Vector<String> userLangs= u.getLanguages();
+			for (int i= 0; i < langs.length; i++)
+			{
+				if (userLangs.contains(langs[i]))
+				{
 					matchedUsers.add(u);
 				}
 			}
 		}
 		return matchedUsers;
-
 	}
 
-	public Vector<User> findDays(String[] days) {
+	public Vector<User> findDays(String[] days)
+	{
 
 		Vector<User> validUsers= new Vector<User>();
 		for (User u : this.users)
@@ -94,10 +105,10 @@ public class UserContainer {
 			}
 		}
 		return validUsers;
-
 	}
 
-	public Vector<User> findColor(String color) {
+	public Vector<User> findColor(String color)
+	{
 
 		Vector<User> validUsers= new Vector<User>();
 		for (User u : this.users)
@@ -108,10 +119,10 @@ public class UserContainer {
 			}
 		}
 		return validUsers;
-
 	}
 
-	public Vector<User> queryUsers(Map<String, String[]> query) {
+	public Vector<User> queryUsers(Map<String,String[]> query)
+	{
 
 		Vector<User> desiredUsers= new Vector<User>();
 		for (String fName : query.get("fName"))
