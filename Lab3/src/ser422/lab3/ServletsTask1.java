@@ -1,7 +1,9 @@
+
 package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -15,13 +17,17 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ServletsTask1
  */
 @WebServlet("/ServletsTask1")
-public class ServletsTask1 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class ServletsTask1 extends HttpServlet
+{
+
+	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ServletsTask1() {
+	public ServletsTask1()
+	{
+
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -30,7 +36,9 @@ public class ServletsTask1 extends HttpServlet {
 	 * @see Servlet#init(ServletConfig)
 	 */
 	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init(ServletConfig config) throws ServletException
+	{
+
 		// TODO Auto-generated method stub
 		super.init(config);
 	}
@@ -39,7 +47,9 @@ public class ServletsTask1 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+
 		// TODO Auto-generated method stub
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
@@ -81,18 +91,7 @@ public class ServletsTask1 extends HttpServlet {
 			out.println("<input type=\"checkbox\" name=\"fri\">Friday<br>");
 			out.println("<input type=\"checkbox\" name=\"sat\">Saturday");
 			out.println("<h2>Your favorite color</h2>");
-			out.println("<input type=\"radio\" name=\"red\">Red<br>");
-			out.println("<input type=\"radio\" name=\"blue\">Blue<br>");
-			out.println("<input type=\"radio\" name=\"green\">Green<br>");
-			out.println("<input type=\"radio\" name=\"yellow\">Yellow<br>");
-			out.println("<input type=\"radio\" name=\"orange\">Orange<br>");
-			out.println("<input type=\"radio\" name=\"purple\">Purple<br>");
-			out.println("<input type=\"radio\" name=\"pink\">Pink<br>");
-			out.println("<input type=\"radio\" name=\"brown\">Brown<br>");
-			out.println("<input type=\"radio\" name=\"black\">Black<br>");
-			out.println("<input type=\"radio\" name=\"white\">White<br>");
-			out.println("<input type=\"radio\" name=\"gray\">Gray<br>");
-			out.println("<input type=\"radio\" name=\"othercolor\">Other<br>");
+			out.println("<input type=\"text\" name=\"favcolor\"><br>");
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -114,11 +113,13 @@ public class ServletsTask1 extends HttpServlet {
 		res.addHeader("Pragma", "no-cache");
 		res.setDateHeader("Expires", -1);
 		res.setContentType("text/html");
+		Map<String,String[]> formData= req.getParameterMap();
 		PrintWriter out= res.getWriter();
 		try
 		{
 
-			out.println("POST~!<BR>");
+			out.println("POST~!<BR> ");
+			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
 
 		}
 		finally
@@ -126,5 +127,4 @@ public class ServletsTask1 extends HttpServlet {
 			out.close();
 		}
 	}
-
 }
