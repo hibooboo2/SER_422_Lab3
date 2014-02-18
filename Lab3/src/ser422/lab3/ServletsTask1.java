@@ -1,5 +1,5 @@
 
-package ser422.lab3.servlet;
+package ser422.lab3;
 
 import java.io.IOException;
 import java.io.InputStream;
