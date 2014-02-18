@@ -33,7 +33,6 @@ public class ServletsTask1 extends HttpServlet
 	{
 
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -43,7 +42,6 @@ public class ServletsTask1 extends HttpServlet
 	public void init(ServletConfig config) throws ServletException
 	{
 
-		// TODO Auto-generated method stub
 		super.init(config);
 		_filename= config.getInitParameter("userFile");
 	}
