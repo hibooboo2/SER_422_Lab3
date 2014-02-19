@@ -168,8 +168,8 @@ public class ServletsTask1 extends HttpServlet
 		{
 
 			out.println("POST~!<BR> ");
-			out.println(this.userCont.getUsers().toString());
-			out.println(_filename + (new File(_filename)).exists());
+			out.println(this.userCont.getUsers().toString() + "<BR>");
+			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
 			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
 
 		}
@@ -491,7 +491,7 @@ class UserContainer
 				desiredUsers.addAll(this.findColor(color));
 			}
 		}
-		return this.users;
+		return desiredUsers;
 	}
 
 	/**
