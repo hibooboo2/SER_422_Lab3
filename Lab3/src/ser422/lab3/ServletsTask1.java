@@ -1,6 +1,7 @@
 
 package ser422.lab3;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -30,6 +31,8 @@ public class ServletsTask1 extends HttpServlet
 
 	private static String		_filename			= null;
 
+	UserContainer				userCont			= null;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -48,6 +51,7 @@ public class ServletsTask1 extends HttpServlet
 
 		super.init(config);
 		_filename= config.getInitParameter("userFile");
+		this.userCont= new UserContainer(new Vector<User>());
 	}
 
 	/**
@@ -58,24 +62,30 @@ public class ServletsTask1 extends HttpServlet
 	{
 
 		ServletContext sc= this.getServletContext();
-		//sc.getResource(_filename).openConnection().getOutputStream();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		Map<String,String[]> query= request.getParameterMap();
-		UserContainer userCont= null;
-		try
-		{
-			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		}
-		catch (ClassNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			response.sendError(500);
-		}
-		Vector<User> validUsers= userCont.queryUsers(query);
 		PrintWriter out= response.getWriter();
+		Map<String,String[]> query= request.getParameterMap();
+		// TODO Make sure that this is in the right place and working. Keeps giving stream errors.
+		// UserContainer userCont= null;
+		// try
+		// {
+		// this.userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		// }
+		// catch (ClassNotFoundException e)
+		// {
+		// response.sendError(500);
+		// }
+		Vector<User> validUsers= this.userCont.queryUsers(query);
+		if (validUsers != null)
+		{
+			for (User u : validUsers)
+			{
+				out.println(u.toString());
+			}
+		}
 		try
 		{
 			out.println("<!DOCTYPE html>");
@@ -85,10 +95,6 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			for (User u : validUsers)
-			{
-				out.println(u.toString());
-			}
 			out.println("<h2>Your name</h2>");
 			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
@@ -115,7 +121,7 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
 			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday");
 			out.println("<h2>Your favorite color</h2>");
-			out.println("<input type=\"text\" name=\"favcolor\"><br>");
+			out.println("<input type=\"text\" name=\"color\"><br>");
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -139,24 +145,31 @@ public class ServletsTask1 extends HttpServlet
 		res.addHeader("Pragma", "no-cache");
 		res.setDateHeader("Expires", -1);
 		res.setContentType("text/html");
-		Map<String,String[]> formData= req.getParameterMap();
-		UserContainer userCont= null;
-		try
-		{
-			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		}
-		catch (ClassNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			res.sendError(500);
-		}
-		userCont.addUser(new User(formData));
-		userCont.writeToFile(sc.getResource(_filename).openConnection().getOutputStream());
 		PrintWriter out= res.getWriter();
+		Map<String,String[]> formData= req.getParameterMap();
+		// TODO This is causing http://i.imgur.com/0Qt0AVu.png why?
+
+		// TODO Keeps giving stream errors why?
+		// UserContainer userCont= null;
+		// try
+		// {
+		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		// }
+		// catch (ClassNotFoundException e)
+		// {
+		// // TODO Auto-generated catch block
+		// out.println(_filename + (new File(_filename)).exists());
+		// out.close();
+		// // res.sendError(500);
+		// }
+		this.userCont.addUser(new User(formData));
+		// this.userCont.writeToFile(sc.getResource(_filename).openConnection().getOutputStream());
 		try
 		{
 
 			out.println("POST~!<BR> ");
+			out.println(this.userCont.getUsers().toString());
+			out.println(_filename + (new File(_filename)).exists());
 			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
 
 		}
@@ -355,7 +368,10 @@ class UserContainer
 		ObjectInputStream ois= new ObjectInputStream(fin);
 		userCont= (UserContainer) ois.readObject();
 		ois.close();
-
+		if (userCont == null)
+		{
+			userCont= new UserContainer(new Vector<User>());
+		}
 		return userCont;
 	}
 
@@ -440,19 +456,34 @@ class UserContainer
 	{
 
 		Vector<User> desiredUsers= new Vector<User>();
-		for (String fName : query.get("fName"))
+		if (query.containsKey("fName"))
 		{
-			desiredUsers.addAll(this.findFname(fName));
+			for (String fName : query.get("fName"))
+			{
+				desiredUsers.addAll(this.findFname(fName));
+			}
 		}
-		for (String lName : query.get("lName"))
+		if (query.containsKey("lName"))
 		{
-			desiredUsers.addAll(this.findFname(lName));
+			for (String lName : query.get("lName"))
+			{
+				desiredUsers.addAll(this.findFname(lName));
+			}
 		}
-		desiredUsers.addAll(this.findLanguages(query.get("langs")));
-		desiredUsers.addAll(this.findLanguages(query.get("days")));
-		for (String color : query.get("color"))
+		if (query.containsKey("langs"))
 		{
-			desiredUsers.addAll(this.findColor(color));
+			desiredUsers.addAll(this.findLanguages(query.get("langs")));
+		}
+		if (query.containsKey("days"))
+		{
+			desiredUsers.addAll(this.findLanguages(query.get("days")));
+		}
+		if (query.containsKey("color"))
+		{
+			for (String color : query.get("color"))
+			{
+				desiredUsers.addAll(this.findColor(color));
+			}
 		}
 		return this.users;
 	}
