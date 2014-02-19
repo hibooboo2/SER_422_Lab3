@@ -547,6 +547,7 @@ class UserContainer
 				toRemove.add(u);
 			}
 		}
+		allMatches.removeAll(toRemove);
 		return allMatches;
 	}
 
