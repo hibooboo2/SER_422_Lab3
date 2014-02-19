@@ -399,13 +399,16 @@ class UserContainer
 
 	public Vector<User> findFname(String fName)
 	{
-
 		Vector<User> matchedUsers= new Vector<User>();
+		String[] fNameArray= fName.split(" ");
 		for (User u : this.users)
 		{
-			if (u.getfName().contains(fName))
+			for (int i= 0; i < fNameArray.length; i++)
 			{
-				matchedUsers.add(u);
+				if (u.getfName().contains(fNameArray[i]))
+				{
+					matchedUsers.add(u);
+				}
 			}
 		}
 		return matchedUsers;
@@ -413,13 +416,16 @@ class UserContainer
 
 	public Vector<User> findLname(String lName)
 	{
-
 		Vector<User> validUsers= new Vector<User>();
+		String[] lNameArray= lName.split(" ");
 		for (User u : this.users)
 		{
-			if (u.getfName().contains(lName))
+			for (int i= 0; i < lNameArray.length; i++)
 			{
-				validUsers.add(u);
+				if (u.getlName().contains(lNameArray[i]))
+				{
+					validUsers.add(u);
+				}
 			}
 		}
 		return validUsers;
@@ -466,11 +472,15 @@ class UserContainer
 	{
 
 		Vector<User> validUsers= new Vector<User>();
+		String[] colorArray= color.split(" ");
 		for (User u : this.users)
 		{
-			if (u.getColor().equalsIgnoreCase(color))
+			for (int i= 0; i < colorArray.length; i++)
 			{
-				validUsers.add(u);
+				if (u.getColor().equalsIgnoreCase(colorArray[i]))
+				{
+					validUsers.add(u);
+				}
 			}
 		}
 		return validUsers;
