@@ -216,14 +216,20 @@ class User
 		this.fName= formMap.get("firstname")[0];
 		this.lName= formMap.get("lastname")[0];
 		this.languages= new Vector<String>();
-		for (int i= 0; i < formMap.get("langs").length; i++)
+		if (formMap.get("langs") != null)
 		{
-			this.languages.add(formMap.get("langs")[i]);
+			for (int i= 0; i < formMap.get("langs").length; i++)
+			{
+				this.languages.add(formMap.get("langs")[i]);
+			}
 		}
 		this.days= new Vector<String>();
-		for (int i= 0; i < formMap.get("days").length; i++)
+		if (formMap.get("days") != null)
 		{
-			this.days.add(formMap.get("days")[i]);
+			for (int i= 0; i < formMap.get("days").length; i++)
+			{
+				this.days.add(formMap.get("days")[i]);
+			}
 		}
 		this.color= formMap.get("color")[0];
 	}
