@@ -91,12 +91,12 @@ public class ServletsTask1 extends HttpServlet
 		{
 			for (User u : validUsers)
 			{
-				out.println(u.toString());
+				out.println(u.toString() + "<BR>");
 			}
 		}
 		else
 		{
-			out.println("No valid Users!");
+			out.println("No valid Users!" + "<BR>");
 		}
 		try
 		{
