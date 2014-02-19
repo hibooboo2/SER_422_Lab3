@@ -81,7 +81,7 @@ public class ServletsTask1 extends HttpServlet
 		Vector<User> validUsers= null;
 		if (!query.isEmpty())
 		{
-			this.userCont.queryUsers(query);
+			validUsers= this.userCont.queryUsers(query);
 		}
 		else
 		{
