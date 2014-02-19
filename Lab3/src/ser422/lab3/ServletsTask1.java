@@ -78,13 +78,25 @@ public class ServletsTask1 extends HttpServlet
 		// {
 		// response.sendError(500);
 		// }
-		Vector<User> validUsers= this.userCont.queryUsers(query);
+		Vector<User> validUsers= null;
+		if (!query.isEmpty())
+		{
+			this.userCont.queryUsers(query);
+		}
+		else
+		{
+			validUsers= this.userCont.getUsers();
+		}
 		if (validUsers != null)
 		{
 			for (User u : validUsers)
 			{
 				out.println(u.toString());
 			}
+		}
+		else
+		{
+			out.println("No valid Users!");
 		}
 		try
 		{
@@ -173,7 +185,7 @@ public class ServletsTask1 extends HttpServlet
 			out.println("POST~!<BR> ");
 			out.println(this.userCont.getUsers().toString() + "<BR>");
 			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
-			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
+			out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
 			out.println("</body></html>");
 
 		}
