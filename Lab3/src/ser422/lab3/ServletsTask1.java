@@ -8,8 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -51,7 +51,7 @@ public class ServletsTask1 extends HttpServlet
 
 		super.init(config);
 		_filename= config.getInitParameter("userFile");
-		this.userCont= new UserContainer(new Vector<User>());
+		this.userCont= new UserContainer(new LinkedHashSet<User>());
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ServletsTask1 extends HttpServlet
 		// {
 		// response.sendError(500);
 		// }
-		Vector<User> validUsers= null;
+		LinkedHashSet<User> validUsers= null;
 		if (!query.isEmpty())
 		{
 			validUsers= this.userCont.queryUsers(query);
@@ -202,9 +202,9 @@ class User
 
 	private String			lName;
 
-	private Vector<String>	languages;
+	private LinkedHashSet<String>	languages;
 
-	private Vector<String>	days;
+	private LinkedHashSet<String>	days;
 
 	private String			color;
 
@@ -215,7 +215,7 @@ class User
 	 * @param days
 	 * @param color
 	 */
-	public User(String fName, String lName, Vector<String> languages, Vector<String> days, String color)
+	public User(String fName, String lName, LinkedHashSet<String> languages, LinkedHashSet<String> days, String color)
 	{
 
 		super();
@@ -231,7 +231,7 @@ class User
 
 		this.fName= formMap.get("firstname")[0];
 		this.lName= formMap.get("lastname")[0];
-		this.languages= new Vector<String>();
+		this.languages= new LinkedHashSet<String>();
 		if (formMap.get("langs") != null)
 		{
 			for (int i= 0; i < formMap.get("langs").length; i++)
@@ -239,7 +239,7 @@ class User
 				this.languages.add(formMap.get("langs")[i]);
 			}
 		}
-		this.days= new Vector<String>();
+		this.days= new LinkedHashSet<String>();
 		if (formMap.get("days") != null)
 		{
 			for (int i= 0; i < formMap.get("days").length; i++)
@@ -291,7 +291,7 @@ class User
 	/**
 	 * @return the languages
 	 */
-	public Vector<String> getLanguages()
+	public LinkedHashSet<String> getLanguages()
 	{
 
 		return this.languages;
@@ -301,7 +301,7 @@ class User
 	 * @param languages
 	 *            the languages to set
 	 */
-	public void setLanguages(Vector<String> languages)
+	public void setLanguages(LinkedHashSet<String> languages)
 	{
 
 		this.languages= languages;
@@ -310,7 +310,7 @@ class User
 	/**
 	 * @return the days
 	 */
-	public Vector<String> getDays()
+	public LinkedHashSet<String> getDays()
 	{
 
 		return this.days;
@@ -320,7 +320,7 @@ class User
 	 * @param days
 	 *            the days to set
 	 */
-	public void setDays(Vector<String> days)
+	public void setDays(LinkedHashSet<String> days)
 	{
 
 		this.days= days;
@@ -364,14 +364,14 @@ class UserContainer
 	/**
 	 * @param users
 	 */
-	public UserContainer(Vector<User> users)
+	public UserContainer(LinkedHashSet<User> users)
 	{
 
 		super();
 		this.users= users;
 	}
 
-	private final Vector<User>	users;
+	private final LinkedHashSet<User>	users;
 
 	private String			fileLocation;
 
@@ -392,18 +392,18 @@ class UserContainer
 		ois.close();
 		if (userCont == null)
 		{
-			userCont= new UserContainer(new Vector<User>());
+			userCont= new UserContainer(new LinkedHashSet<User>());
 		}
 		return userCont;
 	}
 
-	public Vector<User> findFname(String fName)
+	public LinkedHashSet<User> findFname(String fName)
 	{
 
-		Vector<User> matchedUsers= new Vector<User>();
+		LinkedHashSet<User> matchedUsers= new LinkedHashSet<User>();
 		for (User u : this.users)
 		{
-			if (u.getfName().contains(fName))
+			if (u.getfName().contains(fName) && !matchedUsers.contains(u))
 			{
 				matchedUsers.add(u);
 			}
@@ -411,13 +411,13 @@ class UserContainer
 		return matchedUsers;
 	}
 
-	public Vector<User> findLname(String lName)
+	public LinkedHashSet<User> findLname(String lName)
 	{
 
-		Vector<User> validUsers= new Vector<User>();
+		LinkedHashSet<User> validUsers= new LinkedHashSet<User>();
 		for (User u : this.users)
 		{
-			if (u.getfName().contains(lName))
+			if (u.getfName().contains(lName) && !validUsers.contains(u))
 			{
 				validUsers.add(u);
 			}
@@ -425,17 +425,17 @@ class UserContainer
 		return validUsers;
 	}
 
-	public Vector<User> findLanguages(String langs)
+	public LinkedHashSet<User> findLanguages(String langs)
 	{
 
-		Vector<User> matchedUsers= new Vector<User>();
+		LinkedHashSet<User> matchedUsers= new LinkedHashSet<User>();
 		String[] langsArray= langs.split(" ");
 		for (User u : this.users)
 		{
-			Vector<String> userLangs= u.getLanguages();
+			LinkedHashSet<String> userLangs= u.getLanguages();
 			for (int i= 0; i < langsArray.length; i++)
 			{
-				if (userLangs.contains(langsArray[i]))
+				if (userLangs.contains(langsArray[i]) && !matchedUsers.contains(u))
 				{
 					matchedUsers.add(u);
 				}
@@ -444,10 +444,10 @@ class UserContainer
 		return matchedUsers;
 	}
 
-	public Vector<User> findDays(String days)
+	public LinkedHashSet<User> findDays(String days)
 	{
 
-		Vector<User> validUsers= new Vector<User>();
+		LinkedHashSet<User> validUsers= new LinkedHashSet<User>();
 		String[] daysArray= days.split(" ");
 		for (User u : this.users)
 		{
@@ -462,10 +462,10 @@ class UserContainer
 		return validUsers;
 	}
 
-	public Vector<User> findColor(String color)
+	public LinkedHashSet<User> findColor(String color)
 	{
 
-		Vector<User> validUsers= new Vector<User>();
+		LinkedHashSet<User> validUsers= new LinkedHashSet<User>();
 		for (User u : this.users)
 		{
 			if (u.getColor().equalsIgnoreCase(color))
@@ -476,10 +476,10 @@ class UserContainer
 		return validUsers;
 	}
 
-	public Vector<User> queryUsers(Map<String,String[]> query)
+	public LinkedHashSet<User> queryUsers(Map<String,String[]> query)
 	{
 
-		Vector<User> desiredUsers= new Vector<User>();
+		LinkedHashSet<User> desiredUsers= new LinkedHashSet<User>();
 		if (query.containsKey("fName"))
 		{
 			desiredUsers.addAll(this.findFname(query.get("fName")[0]));
@@ -506,7 +506,7 @@ class UserContainer
 	/**
 	 * @return the users
 	 */
-	public Vector<User> getUsers()
+	public LinkedHashSet<User> getUsers()
 	{
 
 		return this.users;
