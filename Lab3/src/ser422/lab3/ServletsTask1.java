@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -491,7 +492,7 @@ class UserContainer
 	public LinkedHashSet<User> queryUsers(Map<String,String[]> query)
 	{
 
-		LinkedHashSet<User> desiredUsers= new LinkedHashSet<User>();
+		LinkedHashSet<User> allMatches= new LinkedHashSet<User>();
 		LinkedHashSet<User> fNameUsers= null;
 		LinkedHashSet<User> lNameUsers= null;
 		LinkedHashSet<User> langsUsers= null;
@@ -500,24 +501,38 @@ class UserContainer
 		if (query.containsKey("fName"))
 		{
 			fNameUsers= this.findFname(query.get("fName")[0]);
+			allMatches.addAll(fNameUsers);
 		}
 		if (query.containsKey("lName"))
 		{
 			lNameUsers= this.findLname(query.get("lName")[0]);
+			allMatches.addAll(lNameUsers);
 		}
 		if (query.containsKey("langs"))
 		{
 			langsUsers= this.findLanguages(query.get("langs")[0]);
+			allMatches.addAll(langsUsers);
 		}
 		if (query.containsKey("days"))
 		{
 			daysUsers= this.findLanguages(query.get("days")[0]);
+			allMatches.addAll(daysUsers);
 		}
 		if (query.containsKey("color"))
 		{
 			colorUsers= this.findColor(query.get("color")[0]);
+			allMatches.addAll(colorUsers);
 		}
-		return desiredUsers;
+		Iterator<User> tempDesired= allMatches.iterator();
+		for (int i= 0; i < allMatches.size(); i++)
+		{
+			User u= tempDesired.next();
+			if (!(fNameUsers.contains(u) && lNameUsers.contains(u) && langsUsers.contains(u) && daysUsers.contains(u) && colorUsers.contains(u)))
+			{
+				allMatches.remove(u);
+			}
+		}
+		return allMatches;
 	}
 
 	/**
