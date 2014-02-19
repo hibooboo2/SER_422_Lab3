@@ -526,23 +526,9 @@ class UserContainer
 		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
 		for (User u: allMatches)
 		{
-			if (query.containsKey("fName") && !fNameUsers.contains(u))
-			{
-				toRemove.add(u);
-			}
-			if (query.containsKey("lName") && !lNameUsers.contains(u))
-			{
-				toRemove.add(u);
-			}
-			if (query.containsKey("langs") && !langsUsers.contains(u))
-			{
-				toRemove.add(u);
-			}
-			if (query.containsKey("days") && !daysUsers.contains(u))
-			{
-				toRemove.add(u);
-			}
-			if (query.containsKey("color") && !colorUsers.contains(u))
+			if ((query.containsKey("fName") && !fNameUsers.contains(u)) | (query.containsKey("lName") && !lNameUsers.contains(u))
+					| (query.containsKey("langs") && !langsUsers.contains(u)) | (query.containsKey("days") && !daysUsers.contains(u))
+					| (query.containsKey("color") && !colorUsers.contains(u)))
 			{
 				toRemove.add(u);
 			}
@@ -566,10 +552,7 @@ class UserContainer
 	 */
 	public void addUser(User user)
 	{
-		if (!this.users.contains(user))
-		{
-			this.users.add(user);
-		}
+		this.users.add(user);
 	}
 
 	/**
