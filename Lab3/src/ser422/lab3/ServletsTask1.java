@@ -87,7 +87,7 @@ public class ServletsTask1 extends HttpServlet
 		{
 			validUsers= this.userCont.getUsers();
 		}
-		if (validUsers != null)
+		if (validUsers != null && !validUsers.isEmpty())
 		{
 			for (User u : validUsers)
 			{
@@ -459,9 +459,10 @@ class UserContainer
 		String[] daysArray= days.split(" ");
 		for (User u : this.users)
 		{
+			LinkedHashSet<String> userDays= u.getDays();
 			for (int i= 0; i < daysArray.length; i++)
 			{
-				if (u.getDays().contains(daysArray[i]))
+				if (userDays.contains(daysArray[i]))
 				{
 					validUsers.add(u);
 				}
@@ -522,27 +523,26 @@ class UserContainer
 			colorUsers= this.findColor(query.get("color")[0]);
 			allMatches.addAll(colorUsers);
 		}
-
 		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
 		for (User u: allMatches)
 		{
-			if (!fNameUsers.contains(u) && query.containsKey("fName"))
+			if (query.containsKey("fName") && !fNameUsers.contains(u))
 			{
 				toRemove.add(u);
 			}
-			if (!lNameUsers.contains(u) && query.containsKey("lName"))
+			if (query.containsKey("lName") && !lNameUsers.contains(u))
 			{
 				toRemove.add(u);
 			}
-			if (!langsUsers.contains(u) && query.containsKey("langs"))
+			if (query.containsKey("langs") && !langsUsers.contains(u))
 			{
 				toRemove.add(u);
 			}
-			if (!daysUsers.contains(u) && query.containsKey("days"))
+			if (query.containsKey("days") && !daysUsers.contains(u))
 			{
 				toRemove.add(u);
 			}
-			if (!colorUsers.contains(u) && query.containsKey("color"))
+			if (query.containsKey("color") && !colorUsers.contains(u))
 			{
 				toRemove.add(u);
 			}
