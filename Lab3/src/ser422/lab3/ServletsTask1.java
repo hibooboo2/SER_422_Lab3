@@ -425,16 +425,17 @@ class UserContainer
 		return validUsers;
 	}
 
-	public Vector<User> findLanguages(String[] langs)
+	public Vector<User> findLanguages(String langs)
 	{
 
 		Vector<User> matchedUsers= new Vector<User>();
+		String[] langsArray= langs.split(" ");
 		for (User u : this.users)
 		{
 			Vector<String> userLangs= u.getLanguages();
-			for (int i= 0; i < langs.length; i++)
+			for (int i= 0; i < langsArray.length; i++)
 			{
-				if (userLangs.contains(langs[i]))
+				if (userLangs.contains(langsArray[i]))
 				{
 					matchedUsers.add(u);
 				}
@@ -443,15 +444,16 @@ class UserContainer
 		return matchedUsers;
 	}
 
-	public Vector<User> findDays(String[] days)
+	public Vector<User> findDays(String days)
 	{
 
 		Vector<User> validUsers= new Vector<User>();
+		String[] daysArray= days.split(" ");
 		for (User u : this.users)
 		{
-			for (int i= 0; i < days.length; i++)
+			for (int i= 0; i < daysArray.length; i++)
 			{
-				if (u.getDays().contains(days[i]))
+				if (u.getDays().contains(daysArray[i]))
 				{
 					validUsers.add(u);
 				}
@@ -480,32 +482,23 @@ class UserContainer
 		Vector<User> desiredUsers= new Vector<User>();
 		if (query.containsKey("fName"))
 		{
-			for (String fName : query.get("fName"))
-			{
-				desiredUsers.addAll(this.findFname(fName));
-			}
+			desiredUsers.addAll(this.findFname(query.get("fName")[0]));
 		}
 		if (query.containsKey("lName"))
 		{
-			for (String lName : query.get("lName"))
-			{
-				desiredUsers.addAll(this.findFname(lName));
-			}
+			desiredUsers.addAll(this.findLname(query.get("lName")[0]));
 		}
 		if (query.containsKey("langs"))
 		{
-			desiredUsers.addAll(this.findLanguages(query.get("langs")));
+			desiredUsers.addAll(this.findLanguages(query.get("langs")[0]));
 		}
 		if (query.containsKey("days"))
 		{
-			desiredUsers.addAll(this.findLanguages(query.get("days")));
+			desiredUsers.addAll(this.findLanguages(query.get("days")[0]));
 		}
 		if (query.containsKey("color"))
 		{
-			for (String color : query.get("color"))
-			{
-				desiredUsers.addAll(this.findColor(color));
-			}
+			desiredUsers.addAll(this.findColor(query.get("color")[0]));
 		}
 		return desiredUsers;
 	}
@@ -550,4 +543,5 @@ class UserContainer
 		this.fileLocation= fileLocation;
 	}
 }
+
 
