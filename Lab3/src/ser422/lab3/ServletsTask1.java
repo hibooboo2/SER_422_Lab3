@@ -492,25 +492,30 @@ class UserContainer
 	{
 
 		LinkedHashSet<User> desiredUsers= new LinkedHashSet<User>();
+		LinkedHashSet<User> fNameUsers= null;
+		LinkedHashSet<User> lNameUsers= null;
+		LinkedHashSet<User> langsUsers= null;
+		LinkedHashSet<User> daysUsers= null;
+		LinkedHashSet<User> colorUsers= null;
 		if (query.containsKey("fName"))
 		{
-			desiredUsers.addAll(this.findFname(query.get("fName")[0]));
+			fNameUsers= this.findFname(query.get("fName")[0]);
 		}
 		if (query.containsKey("lName"))
 		{
-			desiredUsers.addAll(this.findLname(query.get("lName")[0]));
+			lNameUsers= this.findLname(query.get("lName")[0]);
 		}
 		if (query.containsKey("langs"))
 		{
-			desiredUsers.addAll(this.findLanguages(query.get("langs")[0]));
+			langsUsers= this.findLanguages(query.get("langs")[0]);
 		}
 		if (query.containsKey("days"))
 		{
-			desiredUsers.addAll(this.findLanguages(query.get("days")[0]));
+			daysUsers= this.findLanguages(query.get("days")[0]);
 		}
 		if (query.containsKey("color"))
 		{
-			desiredUsers.addAll(this.findColor(query.get("color")[0]));
+			colorUsers= this.findColor(query.get("color")[0]);
 		}
 		return desiredUsers;
 	}
