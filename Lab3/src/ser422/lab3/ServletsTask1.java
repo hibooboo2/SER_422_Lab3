@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -523,13 +522,29 @@ class UserContainer
 			colorUsers= this.findColor(query.get("color")[0]);
 			allMatches.addAll(colorUsers);
 		}
-		Iterator<User> tempDesired= allMatches.iterator();
-		for (int i= 0; i < allMatches.size(); i++)
+
+		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
+		for (User u: allMatches)
 		{
-			User u= tempDesired.next();
-			if (!(fNameUsers.contains(u) && lNameUsers.contains(u) && langsUsers.contains(u) && daysUsers.contains(u) && colorUsers.contains(u)))
+			if (!fNameUsers.contains(u) && query.containsKey("fName"))
 			{
-				allMatches.remove(u);
+				toRemove.add(u);
+			}
+			if (!lNameUsers.contains(u) && query.containsKey("lName"))
+			{
+				toRemove.add(u);
+			}
+			if (!langsUsers.contains(u) && query.containsKey("langs"))
+			{
+				toRemove.add(u);
+			}
+			if (!daysUsers.contains(u) && query.containsKey("days"))
+			{
+				toRemove.add(u);
+			}
+			if (!colorUsers.contains(u) && query.containsKey("color"))
+			{
+				toRemove.add(u);
 			}
 		}
 		return allMatches;
