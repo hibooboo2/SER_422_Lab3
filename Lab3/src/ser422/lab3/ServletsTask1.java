@@ -167,10 +167,14 @@ public class ServletsTask1 extends HttpServlet
 		try
 		{
 
+			out.println("<!DOCTYPE html>");
+			out.println("<html>");
+			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("POST~!<BR> ");
 			out.println(this.userCont.getUsers().toString() + "<BR>");
 			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
 			out.println("<a href=\"" + req.getHeader("referer") + "\"/>test</a>");
+			out.println("</body></html>");
 
 		}
 		finally
