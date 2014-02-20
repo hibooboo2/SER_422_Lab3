@@ -216,7 +216,7 @@ class User
 	public User(Map<String,String[]> formMap)
 	{
 
-		this.userName= formMap.get("userName")[0];
+		this.userName= formMap.get("username")[0];
 		this.fName= formMap.get("firstname")[0];
 		this.lName= formMap.get("lastname")[0];
 		this.langs= new LinkedHashSet<String>();
