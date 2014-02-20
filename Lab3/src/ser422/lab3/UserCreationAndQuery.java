@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ServletsTask1
  */
 @WebServlet("/ServletsTask1")
-public class ServletsTask1 extends HttpServlet
+public class UserCreationAndQuery extends HttpServlet
 {
 
 	private static final long	serialVersionUID	= 1L;
@@ -37,7 +37,7 @@ public class ServletsTask1 extends HttpServlet
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ServletsTask1()
+	public UserCreationAndQuery()
 	{
 
 		super();
