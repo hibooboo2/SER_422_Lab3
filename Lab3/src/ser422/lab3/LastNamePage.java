@@ -47,7 +47,7 @@ public class LastNamePage extends HttpServlet {
 			out.println("<h2>Your last name</h2>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
 			out.println("<input type=\"button\" name=\"prev\" value=\"Previous Page\">");
-			out.println("<input type=\"submit\" name=\"next\" value=\"Next\"> default");
+			out.println("<input type=\"submit\" name=\"next\" value=\"Next\" default>");
 			out.println("</form></body>");
 			out.println("</html>");
 		}
