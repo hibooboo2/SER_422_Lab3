@@ -67,7 +67,7 @@ public class UserNamePage extends HttpServlet
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
 			out.println("<head>");
-			out.println("<title>Enter your last name</title>");
+			out.println("<title>Enter your desired username</title>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your last name</h2>");
 			out.println("Last name: <input type=\"text\" name=\"username\">");
