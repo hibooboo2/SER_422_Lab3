@@ -146,7 +146,6 @@ public class LandingPage extends HttpServlet
 		if (req.getParameter("nav") != null)
 		{
 			Cookie c= new Cookie("alreadyRegisetered", "false");
-			c.setMaxAge(60 * 60 * 24 * 30);
 			res.addCookie(c);
 			if (req.getParameter("nav").equalsIgnoreCase("Go to Form"))
 			{
