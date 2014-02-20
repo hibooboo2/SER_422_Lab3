@@ -54,7 +54,7 @@ public class LangsPage extends HttpServlet
 			out.println("<html>");
 			out.println("<head>");
 			out.println("<title>Lab 3 Langs Page</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+			out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What programming languages you know?</h2>");

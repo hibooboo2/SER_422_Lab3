@@ -68,6 +68,8 @@ public class UserNamePage extends HttpServlet
 			out.println("<html>");
 			out.println("<head>");
 			out.println("<title>Lab3 Username</title>");
+			out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
+			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Enter your desired username</h2>");
 			out.println("Username: <input type=\"text\" name=\"username\"><br>");

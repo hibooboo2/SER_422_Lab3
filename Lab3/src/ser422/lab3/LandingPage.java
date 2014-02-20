@@ -130,8 +130,9 @@ public class LandingPage extends HttpServlet
 				out.println("<html>");
 				out.println("<head>");
 				out.println("<title>Lab 3 Part 2</title>");
+				out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
 				out.println("</head>");
-				out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
+				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Landing Page</h2>");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
@@ -217,8 +218,20 @@ class User
 	{
 
 		this.userName= formMap.get("username")[0];
+		if (this.userName == null)
+		{
+			this.userName= "";
+		}
 		this.fName= formMap.get("firstname")[0];
+		if (this.fName == null)
+		{
+			this.fName= "";
+		}
 		this.lName= formMap.get("lastname")[0];
+		if (this.lName == null)
+		{
+			this.lName= "";
+		}
 		this.langs= new LinkedHashSet<String>();
 		if (formMap.get("langs") != null)
 		{
@@ -236,6 +249,10 @@ class User
 			}
 		}
 		this.color= formMap.get("color")[0];
+		if (this.color == null)
+		{
+			this.color= "";
+		}
 	}
 
 	public User(Cookie[] userCookies)
