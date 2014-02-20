@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ServletsTask1
  */
 @WebServlet("/ServletsTask1")
-public class UserCreationAndQuery extends HttpServlet
+public class LandingPage extends HttpServlet
 {
 
 	private static final long	serialVersionUID	= 1L;
@@ -39,7 +39,7 @@ public class UserCreationAndQuery extends HttpServlet
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserCreationAndQuery()
+	public LandingPage()
 	{
 
 		super();
@@ -106,7 +106,7 @@ public class UserCreationAndQuery extends HttpServlet
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
 			out.println("<head>");
-			out.println("<title>Lab 3 Part 1</title>");
+			out.println("<title>Lab 3 Part 2</title>");
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
