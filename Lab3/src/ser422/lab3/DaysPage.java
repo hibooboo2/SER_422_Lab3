@@ -3,6 +3,8 @@ package ser422.lab3;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,6 +54,7 @@ public class DaysPage extends HttpServlet {
 			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
 			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
 			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
+			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -67,7 +70,18 @@ public class DaysPage extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		ServletContext sc= this.getServletContext();
+		RequestDispatcher rd= null;
+		if (request.getParameter("previous") != null)
+		{
+			rd= sc.getRequestDispatcher("/langs");
+		}
+		else if (request.getParameter("next") != null)
+		{
+			rd= sc.getRequestDispatcher("/Colors");
+		}
+		rd.forward(request, response);
 	}
 
 }

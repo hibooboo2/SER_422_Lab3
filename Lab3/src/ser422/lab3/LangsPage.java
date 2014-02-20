@@ -3,6 +3,8 @@ package ser422.lab3;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,6 +60,7 @@ public class LangsPage extends HttpServlet {
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
+			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -73,7 +76,18 @@ public class LangsPage extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		ServletContext sc= this.getServletContext();
+		RequestDispatcher rd= null;
+		if (request.getParameter("previous") != null)
+		{
+			rd= sc.getRequestDispatcher("/lastName");
+		}
+		else if (request.getParameter("next") != null)
+		{
+			rd= sc.getRequestDispatcher("/Days");
+		}
+		rd.forward(request, response);
 
 	}
 

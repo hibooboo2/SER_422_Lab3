@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ColorPage
  */
-@WebServlet("/ColorPage")
+@WebServlet("/Colors")
 public class ColorPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +46,7 @@ public class ColorPage extends HttpServlet {
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What is your favorite color?</h2>");
 			out.println("<input type=\"text\" name=\"color\"><br>");
+			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -61,7 +62,7 @@ public class ColorPage extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 	}
 
 }
