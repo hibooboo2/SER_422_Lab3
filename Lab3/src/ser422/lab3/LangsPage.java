@@ -71,7 +71,7 @@ public class LangsPage extends HttpServlet
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
 			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
-			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name Page\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Username Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Days Page\">");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -91,9 +91,9 @@ public class LangsPage extends HttpServlet
 
 		if (request.getParameter("nav") != null)
 		{
-			if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))
+			if (request.getParameter("nav").equalsIgnoreCase("Back to Username Page"))
 			{
-				response.sendRedirect("/Lab3/lastName");
+				response.sendRedirect("/Lab3/userName");
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Days Page"))
 			{

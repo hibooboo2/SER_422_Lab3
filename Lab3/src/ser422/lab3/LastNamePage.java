@@ -53,7 +53,7 @@ public class LastNamePage extends HttpServlet {
 			out.println("<h2>Your last name</h2>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
-			out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"To Username Page\" default>");
 			out.println("</form></body>");
 			out.println("</html>");
 		}
@@ -75,7 +75,7 @@ public class LastNamePage extends HttpServlet {
 			{
 				response.sendRedirect("/Lab3/firstName");
 			}
-			else if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
+			else if (request.getParameter("nav").equalsIgnoreCase("To Username Page"))
 			{
 				for (Cookie coo : request.getCookies())
 				{
@@ -91,7 +91,7 @@ public class LastNamePage extends HttpServlet {
 					}
 					response.addCookie(new Cookie(name, valueCombined));
 				}
-				response.sendRedirect("/Lab3/langs");
+				response.sendRedirect("/Lab3/userName");
 			}
 		}
 
