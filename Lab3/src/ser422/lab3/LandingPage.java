@@ -81,10 +81,18 @@ public class LandingPage extends HttpServlet
 		}
 		if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
 		{
+			for (Cookie coo : request.getCookies())
+			{
+				if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
+				{
+					coo.setMaxAge(0);
+				}
+				response.addCookie(coo);
+			}
 			this.userCont.addUser(new User(cookiesMap));
 		}
 
-		if (cookiesMap.containsValue("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		if (cookiesMap.containsKey("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
 		{
 			Map<String,String[]> query= request.getParameterMap();
 			// UserContainer userCont= null;
@@ -125,7 +133,8 @@ public class LandingPage extends HttpServlet
 				out.println("</head>");
 				out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
 				out.println("<h2>Landing Page</h2>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Go to form\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
 				if (cookiesMap.get("userCreationCookiesCleared") != null)
 				{
 					out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
@@ -140,7 +149,7 @@ public class LandingPage extends HttpServlet
 		}
 		else
 		{
-			response.addCookie(new Cookie("alreadyRegisetered", "unknown"));
+			response.addCookie(new Cookie("alreadyRegisetered", "false"));
 			response.sendRedirect("/Lab3/firstName");
 		}
 	}
@@ -153,11 +162,19 @@ public class LandingPage extends HttpServlet
 	{
 		if (req.getParameter("nav") != null)
 		{
-			Cookie c= new Cookie("alreadyRegisetered", "false");
-			res.addCookie(c);
-			if (req.getParameter("nav").equalsIgnoreCase("Go to Form"))
+			res.addCookie(new Cookie("alreadyRegisetered", "false"));
+			if (req.getParameter("nav").equalsIgnoreCase("Not you?"))
 			{
 				res.sendRedirect("/Lab3/firstName");
+			}
+			else if (req.getParameter("nav").equalsIgnoreCase("Clear Cookies!"))
+			{
+				for (Cookie coo : req.getCookies())
+				{
+					coo.setMaxAge(0);
+					res.addCookie(coo);
+				}
+				res.sendRedirect("/Lab3/");
 			}
 		}
 	}
@@ -166,6 +183,7 @@ public class LandingPage extends HttpServlet
 class User
 {
 
+	private String					userName;
 	private String					fName;
 
 	private String					lName;
@@ -183,10 +201,11 @@ class User
 	 * @param days
 	 * @param color
 	 */
-	public User(String fName, String lName, LinkedHashSet<String> languages, LinkedHashSet<String> days, String color)
+	public User(String userName, String fName, String lName, LinkedHashSet<String> languages, LinkedHashSet<String> days, String color)
 	{
 
 		super();
+		this.userName= userName;
 		this.fName= fName;
 		this.lName= lName;
 		this.langs= languages;
@@ -197,6 +216,7 @@ class User
 	public User(Map<String,String[]> formMap)
 	{
 
+		this.userName= formMap.get("userName")[0];
 		this.fName= formMap.get("firstname")[0];
 		this.lName= formMap.get("lastname")[0];
 		this.langs= new LinkedHashSet<String>();
@@ -344,6 +364,25 @@ class User
 		return "firstname=" + this.fName + ",lastname=" + this.lName + ",langs=" + this.langs + ",days=" + this.days + ",color="
 				+ this.color;
 	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName()
+	{
+
+		return this.userName;
+	}
+
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName)
+	{
+
+		this.userName= userName;
+	}
 }
 
 class UserContainer
@@ -426,6 +465,24 @@ class UserContainer
 		}
 		br.close();
 		return userCont;
+	}
+
+	public LinkedHashSet<User> fineUserName(String userName)
+	{
+
+		LinkedHashSet<User> matchedUsers= new LinkedHashSet<User>();
+		String[] userNameArray= userName.split(" ");
+		for (User u : this.users)
+		{
+			for (int i= 0; i < userNameArray.length; i++)
+			{
+				if (u.getUserName().equalsIgnoreCase(userNameArray[i]))
+				{
+					matchedUsers.add(u);
+				}
+			}
+		}
+		return matchedUsers;
 	}
 
 	public LinkedHashSet<User> findFname(String fName)
@@ -524,11 +581,17 @@ class UserContainer
 	{
 
 		LinkedHashSet<User> allMatches= new LinkedHashSet<User>();
+		LinkedHashSet<User> userNameUsers= null;
 		LinkedHashSet<User> fNameUsers= null;
 		LinkedHashSet<User> lNameUsers= null;
 		LinkedHashSet<User> langsUsers= null;
 		LinkedHashSet<User> daysUsers= null;
 		LinkedHashSet<User> colorUsers= null;
+		if (query.containsKey("userName"))
+		{
+			userNameUsers= this.fineUserName(query.get("userName")[0]);
+			allMatches.addAll(userNameUsers);
+		}
 		if (query.containsKey("fName"))
 		{
 			fNameUsers= this.findFname(query.get("fName")[0]);
@@ -557,7 +620,8 @@ class UserContainer
 		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
 		for (User u : allMatches)
 		{
-			if ((query.containsKey("fName") && !fNameUsers.contains(u)) | (query.containsKey("lName") && !lNameUsers.contains(u))
+			if ((query.containsKey("userName") && !userNameUsers.contains(u)) | (query.containsKey("fName") && !fNameUsers.contains(u))
+					| (query.containsKey("lName") && !lNameUsers.contains(u))
 					| (query.containsKey("langs") && !langsUsers.contains(u)) | (query.containsKey("days") && !daysUsers.contains(u))
 					| (query.containsKey("color") && !colorUsers.contains(u)))
 			{
@@ -583,7 +647,6 @@ class UserContainer
 	 */
 	public void addUser(User user)
 	{
-
 		this.users.add(user);
 	}
 }

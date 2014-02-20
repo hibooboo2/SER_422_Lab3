@@ -111,7 +111,8 @@ public class ColorPage extends HttpServlet
 					}
 					response.addCookie(new Cookie(name, valueCombined));
 				}
-				response.addCookie(new Cookie("action", "adduser"));
+				response.addCookie(new Cookie("alreadyRegisetered", "true"));
+				response.addCookie(new Cookie("action", "adduser:"));
 				response.sendRedirect("/Lab3/");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Cancel"))
@@ -124,7 +125,7 @@ public class ColorPage extends HttpServlet
 						response.addCookie(coo);
 					}
 				}
-				response.addCookie(new Cookie("userCreationCookiesCleared", "true"));
+				response.addCookie(new Cookie("userCreationCookiesCleared", "true:"));
 				response.sendRedirect("/Lab3/");
 			}
 

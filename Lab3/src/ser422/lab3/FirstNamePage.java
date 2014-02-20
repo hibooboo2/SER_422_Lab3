@@ -68,7 +68,8 @@ public class FirstNamePage extends HttpServlet
 				response.addCookie(coo);
 			}
 		}
-		if (cookiesMap.containsValue("alreadyRegisetered") && !cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		if (request.getCookies() == null
+				|| (cookiesMap.containsKey("alreadyRegisetered") && !cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true")))
 		{
 			PrintWriter out= response.getWriter();
 			try
@@ -92,9 +93,23 @@ public class FirstNamePage extends HttpServlet
 				out.close();
 			}
 		}
-		else if (cookiesMap.containsValue("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		else if (cookiesMap.containsKey("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
 		{
 			response.sendRedirect("/Lab3/");
+		}
+		else
+		{
+			if (request.getCookies() != null)
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+			}
+			PrintWriter out= response.getWriter();
+			out.println(cookiesMap.get("alreadyRegisetered")[0]);
+			out.close();
+			// response.sendError(response.SC_BAD_REQUEST);
 		}
 	}
 
