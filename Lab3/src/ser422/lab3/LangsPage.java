@@ -87,11 +87,11 @@ public class LangsPage extends HttpServlet
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))
 			{
-				rd= sc.getRequestDispatcher("/lastName");
+				rd= request.getRequestDispatcher("/lastName");
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Days Page"))
 			{
-				rd= sc.getRequestDispatcher("/Days");
+				rd= request.getRequestDispatcher("/Days");
 			}
 			rd.forward(request, response);
 		}

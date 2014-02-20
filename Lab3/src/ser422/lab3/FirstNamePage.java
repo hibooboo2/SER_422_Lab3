@@ -89,10 +89,11 @@ public class FirstNamePage extends HttpServlet
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
 			{
-				rd= sc.getRequestDispatcher("/lastName");
+				rd= request.getRequestDispatcher("/lastName");
 			}
-			else
+			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
 			{
+				rd= request.getRequestDispatcher("/");
 			}
 			rd.forward(request, response);
 		}

@@ -73,7 +73,7 @@ public class ColorPage extends HttpServlet
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("Back To Days"))
 			{
-				rd= sc.getRequestDispatcher("/Days");
+				rd= request.getRequestDispatcher("/Days");
 			}
 			rd.forward(request, response);
 		}
