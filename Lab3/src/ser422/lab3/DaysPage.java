@@ -74,13 +74,13 @@ public class DaysPage extends HttpServlet {
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("To Colors Page"))
 			{
-				rd= request.getRequestDispatcher("/Colors");
+				response.sendRedirect("/Colors");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs Page"))
 			{
-				rd= request.getRequestDispatcher("/langs");
+				response.sendRedirect("/langs");
 			}
-			rd.forward(request, response);
+			// rd.forward(request, response);
 		}
 	}
 

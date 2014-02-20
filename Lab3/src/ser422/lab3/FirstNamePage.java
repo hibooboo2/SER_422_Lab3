@@ -80,7 +80,7 @@ public class FirstNamePage extends HttpServlet
 				}
 				finally
 				{
-					out.close();
+					// out.close();
 				}
 			}
 		}
@@ -89,13 +89,14 @@ public class FirstNamePage extends HttpServlet
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
 			{
-				rd= request.getRequestDispatcher("/lastName");
+				response.sendRedirect("/Lab3/lastName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
 			{
-				rd= request.getRequestDispatcher("/");
+				response.sendRedirect("/");
 			}
-			rd.forward(request, response);
+
+			// rd.forward(request, response);
 		}
 	}
 
