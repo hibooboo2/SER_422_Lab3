@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ServletsTask1
  */
-@WebServlet("/landing")
+@WebServlet("/")
 public class LandingPage extends HttpServlet
 {
 

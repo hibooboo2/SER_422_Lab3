@@ -37,7 +37,9 @@ public class DaysPage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Days Page"))
+		if (request.getParameter("nav") != null
+				&& (request.getParameter("nav").equalsIgnoreCase("Back to Langs Page") || request.getParameter("nav").equalsIgnoreCase(
+						"To Days Page")))
 		{
 			PrintWriter out= response.getWriter();
 			try
@@ -57,7 +59,7 @@ public class DaysPage extends HttpServlet {
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Colors Page\">");
 				out.println("</form></body>");
 				out.println("</html>");
