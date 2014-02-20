@@ -2,11 +2,12 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,42 +38,28 @@ public class LastNamePage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null
-				&& (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page") || request.getParameter("nav").equalsIgnoreCase(
-						"To Last Name Page")))
+		for (Cookie coo : request.getCookies())
 		{
-			PrintWriter out= response.getWriter();
-			try
-			{
-				out.println("<!DOCTYPE html>");
-				out.println("<html>");
-				out.println("<head>");
-				out.println("<title>Enter your last name</title>");
-				out.println("<body bgcolor=\"pink\"><form method=\"get\">");
-				out.println("<h2>Your last name</h2>");
-				out.println("Last name: <input type=\"text\" name=\"lastname\">");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
-				out.println("</form></body>");
-				out.println("</html>");
-			}
-			finally
-			{
-				out.close();
-			}
+			response.addCookie(coo);
 		}
-		else if (request.getParameter("nav") != null)
+		PrintWriter out= response.getWriter();
+		try
 		{
-			RequestDispatcher rd= null;
-			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
-			{
-				response.sendRedirect("/Lab3/firstName");
-			}
-			else if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
-			{
-				response.sendRedirect("/Lab3/langs");
-			}
-			// rd.forward(request, response);
+			out.println("<!DOCTYPE html>");
+			out.println("<html>");
+			out.println("<head>");
+			out.println("<title>Enter your last name</title>");
+			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			out.println("<h2>Your last name</h2>");
+			out.println("Last name: <input type=\"text\" name=\"lastname\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
+			out.println("</form></body>");
+			out.println("</html>");
+		}
+		finally
+		{
+			out.close();
 		}
 	}
 
@@ -82,6 +69,31 @@ public class LastNamePage extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		if (request.getParameter("nav") != null)
+		{
+			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
+			{
+				response.sendRedirect("/Lab3/firstName");
+			}
+			else if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+				Map<String,String[]> data= request.getParameterMap();
+				for (String name : data.keySet())
+				{
+					String valueCombined= "";
+					for (String value : data.get(name))
+					{
+						valueCombined+= value + ":";
+					}
+					response.addCookie(new Cookie(name, valueCombined));
+				}
+				response.sendRedirect("/Lab3/langs");
+			}
+		}
 
 	}
 }

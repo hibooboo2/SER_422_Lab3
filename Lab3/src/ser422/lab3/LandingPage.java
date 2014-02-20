@@ -18,6 +18,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,6 +72,20 @@ public class LandingPage extends HttpServlet
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
 		PrintWriter out= response.getWriter();
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
+		if (request.getCookies() != null)
+		{
+			for (Cookie coo : request.getCookies())
+			{
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
+				coo.setMaxAge(0);
+				response.addCookie(coo);
+			}
+			if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
+			{
+				this.userCont.addUser(new User(cookiesMap));
+			}
+		}
 		Map<String,String[]> query= request.getParameterMap();
 		// UserContainer userCont= null;
 		// try
@@ -219,6 +234,26 @@ class User
 		}
 		this.color= formMap.get("color")[0];
 	}
+
+	public User(Cookie[] userCookies)
+	{
+		this(User.parseCookiesToMap(userCookies));
+	}
+
+	/**
+	 * @param userCookies
+	 * @return
+	 */
+	private static Map<String,String[]> parseCookiesToMap(Cookie[] userCookies)
+	{
+		Map<String,String[]> formMap= new HashMap<String,String[]>();
+		for (Cookie coo : userCookies)
+		{
+			formMap.put(coo.getName(), coo.getValue().split(":"));
+		}
+		return formMap;
+	}
+
 
 	/**
 	 * @return the fName
