@@ -57,7 +57,7 @@ public class DaysPage extends HttpServlet {
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
 				out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Colors Page\">");
 				out.println("</form></body>");
 				out.println("</html>");
@@ -74,7 +74,7 @@ public class DaysPage extends HttpServlet {
 			{
 				rd= sc.getRequestDispatcher("/Colors");
 			}
-			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs"))
+			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs Page"))
 			{
 				rd= sc.getRequestDispatcher("/langs");
 			}
