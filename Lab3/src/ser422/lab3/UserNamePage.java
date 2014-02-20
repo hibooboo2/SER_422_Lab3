@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class firstName
  */
-@WebServlet("/firstName")
+@WebServlet("/userName")
 public class UserNamePage extends HttpServlet
 {
 
