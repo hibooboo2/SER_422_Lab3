@@ -92,6 +92,10 @@ public class FirstNamePage extends HttpServlet
 				out.close();
 			}
 		}
+		else if (cookiesMap.containsValue("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		{
+			response.sendRedirect("/Lab3/");
+		}
 	}
 
 	/**

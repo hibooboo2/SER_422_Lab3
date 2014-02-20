@@ -84,56 +84,64 @@ public class LandingPage extends HttpServlet
 			this.userCont.addUser(new User(cookiesMap));
 		}
 
-		Map<String,String[]> query= request.getParameterMap();
-		// UserContainer userCont= null;
-		// try
-		// {
-		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// response.sendError(500);
-		// }
-		LinkedHashSet<User> validUsers= null;
-		if (!query.isEmpty())
+		if (cookiesMap.containsValue("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
 		{
-			validUsers= this.userCont.queryUsers(query);
-		}
-		else
-		{
-			validUsers= this.userCont.getUsers();
-		}
-		if (validUsers != null && !validUsers.isEmpty())
-		{
-			for (User u : validUsers)
+			Map<String,String[]> query= request.getParameterMap();
+			// UserContainer userCont= null;
+			// try
+			// {
+			// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+			// }
+			// catch (ClassNotFoundException e)
+			// {
+			// response.sendError(500);
+			// }
+			LinkedHashSet<User> validUsers= null;
+			if (!query.isEmpty())
 			{
-				out.println(u.toString() + "<BR>");
+				validUsers= this.userCont.queryUsers(query);
+			}
+			else
+			{
+				validUsers= this.userCont.getUsers();
+			}
+			if (validUsers != null && !validUsers.isEmpty())
+			{
+				for (User u : validUsers)
+				{
+					out.println(u.toString() + "<BR>");
+				}
+			}
+			else
+			{
+				out.println("No valid Users!" + "<BR>");
+			}
+			try
+			{
+				out.println("<!DOCTYPE html>");
+				out.println("<html>");
+				out.println("<head>");
+				out.println("<title>Lab 3 Part 2</title>");
+				out.println("</head>");
+				out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
+				out.println("<h2>Landing Page</h2>");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Go to form\">");
+				if (cookiesMap.get("userCreationCookiesCleared") != null)
+				{
+					out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
+				}
+				out.println("</body>");
+				out.println("</html>");
+			}
+			finally
+			{
+				out.close();
 			}
 		}
 		else
 		{
-			out.println("No valid Users!" + "<BR>");
-		}
-		try
-		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Lab 3 Part 2</title>");
-			out.println("</head>");
-			out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
-			out.println("<h2>Landing Page</h2>");
-			out.println("<input type=\"submit\" name=\"nav\" value=\"Go to form\">");
-			if (cookiesMap.get("userCreationCookiesCleared") != null)
-			{
-				out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
-			}
-			out.println("</body>");
-			out.println("</html>");
-		}
-		finally
-		{
-			out.close();
+			response.addCookie(new Cookie("alreadyRegisetered", "unknown"));
+			response.sendRedirect("/Lab3/firstName");
 		}
 	}
 
