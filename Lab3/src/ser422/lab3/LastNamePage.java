@@ -32,28 +32,45 @@ public class LastNamePage extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		ServletContext sc= this.getServletContext();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		PrintWriter out= response.getWriter();
-		try
+		if (request.getParameter("previous") == null && request.getParameter("next") == null)
 		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Enter your last name</title>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("<h2>Your last name</h2>");
-			out.println("Last name: <input type=\"text\" name=\"lastname\">");
-			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
-			out.println("<input type=\"submit\" name=\"next\" value=\"Next\" default>");
-			out.println("</form></body>");
-			out.println("</html>");
+			PrintWriter out= response.getWriter();
+			try
+			{
+				out.println("<!DOCTYPE html>");
+				out.println("<html>");
+				out.println("<head>");
+				out.println("<title>Enter your last name</title>");
+				out.println("<body bgcolor=\"pink\"><form method=\"get\">");
+				out.println("<h2>Your last name</h2>");
+				out.println("Last name: <input type=\"text\" name=\"lastname\">");
+				out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
+				out.println("<input type=\"submit\" name=\"next\" value=\"Next\" default>");
+				out.println("</form></body>");
+				out.println("</html>");
+			}
+			finally
+			{
+				out.close();
+			}
 		}
-		finally
+		else
 		{
-			out.close();
+			RequestDispatcher rd= null;
+			if (request.getParameter("previous") != null)
+			{
+				rd= sc.getRequestDispatcher("/firstName");
+			}
+			else if (request.getParameter("next") != null)
+			{
+				rd= sc.getRequestDispatcher("/langs");
+			}
+			rd.forward(request, response);
 		}
 	}
 
@@ -61,19 +78,8 @@ public class LastNamePage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 
-		ServletContext sc= this.getServletContext();
-		RequestDispatcher rd= null;
-		if (request.getParameter("previous") != null)
-		{
-			rd= sc.getRequestDispatcher("/firstName");
-		}
-		else if (request.getParameter("next") != null)
-		{
-			rd= sc.getRequestDispatcher("/langs");
-		}
-		rd.forward(request, response);
 	}
-
 }
