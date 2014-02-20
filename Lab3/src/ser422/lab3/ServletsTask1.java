@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -78,7 +80,7 @@ public class ServletsTask1 extends HttpServlet
 		UserContainer userCont= null;
 		try
 		{
-			userCont= UserContainer.getContainer(_filename);
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -167,7 +169,7 @@ public class ServletsTask1 extends HttpServlet
 		UserContainer userCont= null;
 		try
 		{
-			userCont= UserContainer.getContainer(_filename);
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -362,7 +364,7 @@ class UserContainer
 {
 
 	/**
-	 * @param users
+	 * @param uslers
 	 */
 	public UserContainer(LinkedHashSet<User> users)
 	{
@@ -410,6 +412,30 @@ class UserContainer
 			{
 				value[0]= userSplit[i + 1];
 				userParsed.put(userSplit[i], value);
+			}
+			userCont.addUser(new User(userParsed));
+		}
+		br.close();
+		return userCont;
+	}
+
+	public static UserContainer getContainer(InputStream input) throws IOException, ClassNotFoundException
+	{
+
+		UserContainer userCont= new UserContainer(new LinkedHashSet<User>());
+		String user= null;
+		String nextLine= null;
+		BufferedReader br= new BufferedReader(new InputStreamReader(input));
+		// TODO: Test this now!
+		while ((nextLine= br.readLine()) != null)
+		{
+			user= nextLine;
+			HashMap<String,String[]> userParsed= new HashMap<String,String[]>();
+			String[] userSplit= user.split(",");
+			for (String s : userSplit)
+			{
+				String[] nameValuesplit= s.split("=");
+				userParsed.put(nameValuesplit[0], new String[]{nameValuesplit[1]});
 			}
 			userCont.addUser(new User(userParsed));
 		}
