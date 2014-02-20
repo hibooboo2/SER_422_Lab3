@@ -144,45 +144,23 @@ public class LandingPage extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
-
-		res.sendRedirect("/Lab3/firstName");
-		/*
-		 * ServletContext sc= this.getServletContext();
-		 * res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		 * res.addHeader("Pragma", "no-cache");
-		 * res.setDateHeader("Expires", -1);
-		 * res.setContentType("text/html");
-		 * PrintWriter out= res.getWriter();
-		 * Map<String,String[]> formData= req.getParameterMap();
-		 * // UserContainer userCont= null;
-		 * // try
-		 * // {
-		 * // userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		 * // }
-		 * // catch (ClassNotFoundException e)
-		 * // {
-		 * // out.println(_filename + (new File(_filename)).exists());
-		 * // out.close();
-		 * // // res.sendError(500);
-		 * // }
-		 * this.userCont.addUser(new User(formData));
-		 * // userCont.writeToFile(_filename);
-		 * try
-		 * {
-		 * out.println("<!DOCTYPE html>");
-		 * out.println("<html>");
-		 * out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-		 * out.println("POST~!<BR> ");
-		 * out.println(this.userCont.getUsers().toString() + "<BR>");
-		 * out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
-		 * out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
-		 * out.println("</body></html>");
-		 * }
-		 * finally
-		 * {
-		 * out.close();
-		 * }
-		 */
+		if (req.getParameter("nav") != null)
+		{
+			if (req.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
+			{
+				Map<String,String[]> data= req.getParameterMap();
+				for (String name : data.keySet())
+				{
+					String valueCombined= "";
+					for (String value : data.get(name))
+					{
+						valueCombined+= value + ":";
+					}
+					res.addCookie(new Cookie(name, valueCombined));
+				}
+				res.sendRedirect("/Lab3/firstName");
+			}
+		}
 	}
 }
 
