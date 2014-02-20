@@ -1,3 +1,4 @@
+
 package ser422.lab3;
 
 import java.io.IOException;
@@ -15,13 +16,17 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class langs
  */
 @WebServlet("/langs")
-public class LangsPage extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class LangsPage extends HttpServlet
+{
+
+	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LangsPage() {
+	public LangsPage()
+	{
+
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -30,44 +35,63 @@ public class LangsPage extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+
 		// TODO Auto-generated method stub
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		PrintWriter out= response.getWriter();
-		try
+		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
 		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Lab 3 Langs Page</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
-			out.println("</head>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("<h2>What programming languages you know?</h2>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
-			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
-			out.println("<input type=\"submit\" value=\"Submit\">");
-			out.println("</form></body>");
-			out.println("</html>");
+			PrintWriter out= response.getWriter();
+			try
+			{
+				out.println("<!DOCTYPE html>");
+				out.println("<html>");
+				out.println("<head>");
+				out.println("<title>Lab 3 Langs Page</title>");
+				out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+				out.println("</head>");
+				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+				out.println("<h2>What programming languages you know?</h2>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
+				out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"To Days Page\">");
+				out.println("</form></body>");
+				out.println("</html>");
+			}
+			finally
+			{
+				out.close();
+			}
 		}
-		finally
+		else if (request.getParameter("nav") != null)
 		{
-			out.close();
+			ServletContext sc= this.getServletContext();
+			RequestDispatcher rd= null;
+			if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name"))
+			{
+				rd= sc.getRequestDispatcher("/lastName");
+			}
+			if (request.getParameter("nav").equalsIgnoreCase("To Days Page"))
+			{
+				rd= sc.getRequestDispatcher("/Days");
+			}
+			rd.forward(request, response);
 		}
 	}
 
@@ -75,20 +99,8 @@ public class LangsPage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		ServletContext sc= this.getServletContext();
-		RequestDispatcher rd= null;
-		if (request.getParameter("previous") != null)
-		{
-			rd= sc.getRequestDispatcher("/lastName");
-		}
-		else if (request.getParameter("next") != null)
-		{
-			rd= sc.getRequestDispatcher("/Days");
-		}
-		rd.forward(request, response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 
 	}
-
 }
