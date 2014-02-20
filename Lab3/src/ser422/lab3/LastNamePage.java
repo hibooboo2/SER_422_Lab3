@@ -66,11 +66,11 @@ public class LastNamePage extends HttpServlet {
 			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
 			{
-				response.sendRedirect("/firstName");
+				response.sendRedirect("/Lab3/firstName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
 			{
-				response.sendRedirect("/langs");
+				response.sendRedirect("/Lab3/langs");
 			}
 			// rd.forward(request, response);
 		}

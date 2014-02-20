@@ -93,7 +93,7 @@ public class FirstNamePage extends HttpServlet
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
 			{
-				response.sendRedirect("/");
+				response.sendRedirect("/Lab3/");
 			}
 
 			// rd.forward(request, response);
