@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -52,7 +51,6 @@ public class UserNamePage extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 
-		ServletContext sc= this.getServletContext();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
