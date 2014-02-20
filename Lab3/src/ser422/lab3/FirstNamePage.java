@@ -83,7 +83,7 @@ public class FirstNamePage extends HttpServlet
 				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Enter First Name Please:</h2>");
 				out.println("<input type=\"text\" name=\"firstname\"><br>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Landing Page\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Don't register, go to Landing Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Last Name Page\">");
 				out.println("</form></body>");
 				out.println("</html>");
@@ -143,16 +143,20 @@ public class FirstNamePage extends HttpServlet
 				response.addCookie(new Cookie("alreadyRegisetered", "registering"));
 				response.sendRedirect("/Lab3/lastName");
 			}
-			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
+			else if (request.getParameter("nav").equalsIgnoreCase("Don't register, go to Landing Page"))
 			{
-				for (Cookie coo : request.getCookies())
+				if (request.getCookies() != null)
 				{
-					if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
+					for (Cookie coo : request.getCookies())
 					{
-						coo.setMaxAge(0);
+						if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
+						{
+							coo.setMaxAge(0);
+						}
+						response.addCookie(coo);
 					}
-					response.addCookie(coo);
 				}
+				response.addCookie(new Cookie("alreadyRegisetered", "dontRegister"));
 				response.sendRedirect("/Lab3/");
 			}
 		}
