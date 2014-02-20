@@ -37,7 +37,9 @@ public class DaysPage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Days Page"))
+		if (request.getParameter("nav") != null
+				&& (request.getParameter("nav").equalsIgnoreCase("Back to Langs Page") || request.getParameter("nav").equalsIgnoreCase(
+						"To Days Page")))
 		{
 			PrintWriter out= response.getWriter();
 			try

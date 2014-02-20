@@ -43,7 +43,9 @@ public class LangsPage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
+		if (request.getParameter("nav") != null
+				&& (request.getParameter("nav").equalsIgnoreCase("Back to Langs Page") || request.getParameter("nav").equalsIgnoreCase(
+						"To Langs Page")))
 		{
 			PrintWriter out= response.getWriter();
 			try
@@ -69,7 +71,7 @@ public class LangsPage extends HttpServlet
 				out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
 				out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
 				out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Days Page\">");
 				out.println("</form></body>");
 				out.println("</html>");
@@ -83,7 +85,7 @@ public class LangsPage extends HttpServlet
 		{
 			ServletContext sc= this.getServletContext();
 			RequestDispatcher rd= null;
-			if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name"))
+			if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))
 			{
 				rd= sc.getRequestDispatcher("/lastName");
 			}

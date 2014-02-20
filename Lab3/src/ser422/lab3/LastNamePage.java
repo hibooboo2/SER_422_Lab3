@@ -37,7 +37,9 @@ public class LastNamePage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
+		if (request.getParameter("nav") != null
+				&& (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page") || request.getParameter("nav").equalsIgnoreCase(
+						"To Last Name Page")))
 		{
 			PrintWriter out= response.getWriter();
 			try
@@ -49,7 +51,7 @@ public class LastNamePage extends HttpServlet {
 				out.println("<body bgcolor=\"pink\"><form method=\"get\">");
 				out.println("<h2>Your last name</h2>");
 				out.println("Last name: <input type=\"text\" name=\"lastname\">");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
 				out.println("</form></body>");
 				out.println("</html>");
@@ -62,7 +64,7 @@ public class LastNamePage extends HttpServlet {
 		else if (request.getParameter("nav") != null)
 		{
 			RequestDispatcher rd= null;
-			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name"))
+			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
 			{
 				rd= sc.getRequestDispatcher("/firstName");
 			}

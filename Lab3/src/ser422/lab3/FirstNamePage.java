@@ -40,6 +40,7 @@ public class FirstNamePage extends HttpServlet
 	public void init(ServletConfig config) throws ServletException
 	{
 
+		super.init(config);
 		// TODO Auto-generated method stub
 	}
 
@@ -55,7 +56,9 @@ public class FirstNamePage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To First Name Page"))
+		if (request.getParameter("nav") != null
+				&& (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page") || request.getParameter("nav")
+						.equalsIgnoreCase("NewUser")))
 		{
 			{
 				PrintWriter out= response.getWriter();
@@ -88,6 +91,10 @@ public class FirstNamePage extends HttpServlet
 			{
 				rd= sc.getRequestDispatcher("/lastName");
 			}
+			else
+			{
+			}
+			rd.forward(request, response);
 		}
 	}
 
