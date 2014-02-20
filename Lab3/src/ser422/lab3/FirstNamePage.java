@@ -123,6 +123,13 @@ public class FirstNamePage extends HttpServlet
 		{
 			if (request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
 			{
+				if (request.getCookies() != null)
+				{
+					for (Cookie coo : request.getCookies())
+					{
+						response.addCookie(coo);
+					}
+				}
 				Map<String,String[]> data= request.getParameterMap();
 				for (String name : data.keySet())
 				{
@@ -133,10 +140,19 @@ public class FirstNamePage extends HttpServlet
 					}
 					response.addCookie(new Cookie(name, valueCombined));
 				}
+				response.addCookie(new Cookie("alreadyRegisetered", "registering"));
 				response.sendRedirect("/Lab3/lastName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
 			{
+				for (Cookie coo : request.getCookies())
+				{
+					if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
+					{
+						coo.setMaxAge(0);
+					}
+					response.addCookie(coo);
+				}
 				response.sendRedirect("/Lab3/");
 			}
 		}

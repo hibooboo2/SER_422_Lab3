@@ -70,7 +70,7 @@ public class UserNamePage extends HttpServlet
 			out.println("<title>Lab3 Username</title>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Enter your desired username</h2>");
-			out.println("Last name: <input type=\"text\" name=\"username\"><br>");
+			out.println("Username: <input type=\"text\" name=\"username\"><br>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
 			out.println("</form></body>");
@@ -90,18 +90,25 @@ public class UserNamePage extends HttpServlet
 	{
 		if (request.getParameter("nav") != null)
 		{
+			if (request.getCookies() != null)
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+			}
+			Map<String,String[]> data= request.getParameterMap();
+			for (String name : data.keySet())
+			{
+				String valueCombined= "";
+				for (String value : data.get(name))
+				{
+					valueCombined+= value + ":";
+				}
+				response.addCookie(new Cookie(name, valueCombined));
+			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
 			{
-				Map<String,String[]> data= request.getParameterMap();
-				for (String name : data.keySet())
-				{
-					String valueCombined= "";
-					for (String value : data.get(name))
-					{
-						valueCombined+= value + ":";
-					}
-					response.addCookie(new Cookie(name, valueCombined));
-				}
 				response.sendRedirect("/Lab3/langs");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))

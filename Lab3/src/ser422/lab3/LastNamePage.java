@@ -38,9 +38,12 @@ public class LastNamePage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		for (Cookie coo : request.getCookies())
+		if (request.getCookies() != null)
 		{
-			response.addCookie(coo);
+			for (Cookie coo : request.getCookies())
+			{
+				response.addCookie(coo);
+			}
 		}
 		PrintWriter out= response.getWriter();
 		try
@@ -51,7 +54,7 @@ public class LastNamePage extends HttpServlet {
 			out.println("<title>Enter your last name</title>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your last name</h2>");
-			out.println("Username: <input type=\"text\" name=\"lastname\"><br>");
+			out.println("Last Name: <input type=\"text\" name=\"lastname\"><br>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Username Page\" default>");
 			out.println("</form></body>");
@@ -71,26 +74,29 @@ public class LastNamePage extends HttpServlet {
 	{
 		if (request.getParameter("nav") != null)
 		{
+			if (request.getCookies() != null)
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+			}
+			Map<String,String[]> data= request.getParameterMap();
+			for (String name : data.keySet())
+			{
+				String valueCombined= "";
+				for (String value : data.get(name))
+				{
+					valueCombined+= value + ":";
+				}
+				response.addCookie(new Cookie(name, valueCombined));
+			}
 			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
 			{
 				response.sendRedirect("/Lab3/firstName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("To Username Page"))
 			{
-				for (Cookie coo : request.getCookies())
-				{
-					response.addCookie(coo);
-				}
-				Map<String,String[]> data= request.getParameterMap();
-				for (String name : data.keySet())
-				{
-					String valueCombined= "";
-					for (String value : data.get(name))
-					{
-						valueCombined+= value + ":";
-					}
-					response.addCookie(new Cookie(name, valueCombined));
-				}
 				response.sendRedirect("/Lab3/userName");
 			}
 		}

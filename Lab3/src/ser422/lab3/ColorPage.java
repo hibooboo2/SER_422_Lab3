@@ -92,14 +92,31 @@ public class ColorPage extends HttpServlet
 			{
 				if (request.getParameter("nav").equalsIgnoreCase("Back To Days"))
 				{
+					for (Cookie coo : request.getCookies())
+					{
+						response.addCookie(coo);
+					}
+					Map<String,String[]> data= request.getParameterMap();
+					for (String name : data.keySet())
+					{
+						String valueCombined= "";
+						for (String value : data.get(name))
+						{
+							valueCombined+= value + ":";
+						}
+						response.addCookie(new Cookie(name, valueCombined));
+					}
 					response.sendRedirect("/Lab3/Days");
 				}
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Submit"))
 			{
-				for (Cookie coo : request.getCookies())
+				if (request.getCookies() != null)
 				{
-					response.addCookie(coo);
+					for (Cookie coo : request.getCookies())
+					{
+						response.addCookie(coo);
+					}
 				}
 				Map<String,String[]> data= request.getParameterMap();
 				for (String name : data.keySet())

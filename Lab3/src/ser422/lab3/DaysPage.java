@@ -79,22 +79,25 @@ public class DaysPage extends HttpServlet {
 	{
 		if (request.getParameter("nav") != null)
 		{
-			if (request.getParameter("nav").equalsIgnoreCase("To Colors Page"))
+			if (request.getCookies() != null)
 			{
 				for (Cookie coo : request.getCookies())
 				{
 					response.addCookie(coo);
 				}
-				Map<String,String[]> data= request.getParameterMap();
-				for (String name : data.keySet())
+			}
+			Map<String,String[]> data= request.getParameterMap();
+			for (String name : data.keySet())
+			{
+				String valueCombined= "";
+				for (String value : data.get(name))
 				{
-					String valueCombined= "";
-					for (String value : data.get(name))
-					{
-						valueCombined+= value + ":";
-					}
-					response.addCookie(new Cookie(name, valueCombined));
+					valueCombined+= value + ":";
 				}
+				response.addCookie(new Cookie(name, valueCombined));
+			}
+			if (request.getParameter("nav").equalsIgnoreCase("To Colors Page"))
+			{
 				response.sendRedirect("/Lab3/Colors");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs Page"))

@@ -149,7 +149,7 @@ public class LandingPage extends HttpServlet
 		}
 		else
 		{
-			response.addCookie(new Cookie("alreadyRegisetered", "false"));
+			response.addCookie(new Cookie("alreadyRegisetered", "starting"));
 			response.sendRedirect("/Lab3/firstName");
 		}
 	}
@@ -467,7 +467,7 @@ class UserContainer
 		return userCont;
 	}
 
-	public LinkedHashSet<User> fineUserName(String userName)
+	public LinkedHashSet<User> findUserName(String userName)
 	{
 
 		LinkedHashSet<User> matchedUsers= new LinkedHashSet<User>();
@@ -587,19 +587,19 @@ class UserContainer
 		LinkedHashSet<User> langsUsers= null;
 		LinkedHashSet<User> daysUsers= null;
 		LinkedHashSet<User> colorUsers= null;
-		if (query.containsKey("userName"))
+		if (query.containsKey("username"))
 		{
-			userNameUsers= this.fineUserName(query.get("userName")[0]);
+			userNameUsers= this.findUserName(query.get("username")[0]);
 			allMatches.addAll(userNameUsers);
 		}
-		if (query.containsKey("fName"))
+		if (query.containsKey("fname"))
 		{
-			fNameUsers= this.findFname(query.get("fName")[0]);
+			fNameUsers= this.findFname(query.get("fname")[0]);
 			allMatches.addAll(fNameUsers);
 		}
-		if (query.containsKey("lName"))
+		if (query.containsKey("lname"))
 		{
-			lNameUsers= this.findLname(query.get("lName")[0]);
+			lNameUsers= this.findLname(query.get("lname")[0]);
 			allMatches.addAll(lNameUsers);
 		}
 		if (query.containsKey("langs"))
@@ -647,6 +647,10 @@ class UserContainer
 	 */
 	public void addUser(User user)
 	{
-		this.users.add(user);
+
+		if (this.findUserName(user.getUserName()).isEmpty())
+		{
+			this.users.add(user);
+		}
 	}
 }
