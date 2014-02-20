@@ -46,7 +46,7 @@ public class LastNamePage extends HttpServlet {
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your last name</h2>");
 			out.println("Last name: <input type=\"text\" name=\"lastname\">");
-			out.println("<input type=\"button\" name=\"prev\" value=\"Previous Page\">");
+			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
 			out.println("<input type=\"submit\" name=\"next\" value=\"Next\" default>");
 			out.println("</form></body>");
 			out.println("</html>");
@@ -64,7 +64,15 @@ public class LastNamePage extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServletContext sc= this.getServletContext();
-		RequestDispatcher rd= sc.getRequestDispatcher("/langs");
+		RequestDispatcher rd= null;
+		if (request.getParameter("previous") != null)
+		{
+			rd= sc.getRequestDispatcher("/firstName");
+		}
+		else if (request.getParameter("next") != null)
+		{
+			rd= sc.getRequestDispatcher("/langs");
+		}
 		rd.forward(request, response);
 	}
 
