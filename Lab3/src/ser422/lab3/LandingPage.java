@@ -153,6 +153,8 @@ public class LandingPage extends HttpServlet
 	{
 		if (req.getParameter("nav") != null)
 		{
+			Cookie c= new Cookie("alreadyRegisetered", "false");
+			res.addCookie(c);
 			if (req.getParameter("nav").equalsIgnoreCase("Go to Form"))
 			{
 				res.sendRedirect("/Lab3/firstName");
