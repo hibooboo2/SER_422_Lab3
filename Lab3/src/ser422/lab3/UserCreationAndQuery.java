@@ -33,6 +33,8 @@ public class UserCreationAndQuery extends HttpServlet
 
 	private static String		_filename			= null;
 
+	private UserContainer		userCont;
+
 	// UserContainer userCont = null;
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -52,14 +54,7 @@ public class UserCreationAndQuery extends HttpServlet
 
 		super.init(config);
 		_filename= config.getInitParameter("userFile");
-		try
-		{
-			new UserContainer(new LinkedHashSet<User>()).writeToFile(_filename);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		this.userCont= new UserContainer(new LinkedHashSet<User>());
 		;
 	}
 
@@ -77,23 +72,23 @@ public class UserCreationAndQuery extends HttpServlet
 		response.setContentType("text/html");
 		PrintWriter out= response.getWriter();
 		Map<String,String[]> query= request.getParameterMap();
-		UserContainer userCont= null;
-		try
-		{
-			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		}
-		catch (ClassNotFoundException e)
-		{
-			response.sendError(500);
-		}
+		// UserContainer userCont= null;
+		// try
+		// {
+		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		// }
+		// catch (ClassNotFoundException e)
+		// {
+		// response.sendError(500);
+		// }
 		LinkedHashSet<User> validUsers= null;
 		if (!query.isEmpty())
 		{
-			validUsers= userCont.queryUsers(query);
+			validUsers= this.userCont.queryUsers(query);
 		}
 		else
 		{
-			validUsers= userCont.getUsers();
+			validUsers= this.userCont.getUsers();
 		}
 		if (validUsers != null && !validUsers.isEmpty())
 		{
@@ -166,26 +161,26 @@ public class UserCreationAndQuery extends HttpServlet
 		res.setContentType("text/html");
 		PrintWriter out= res.getWriter();
 		Map<String,String[]> formData= req.getParameterMap();
-		UserContainer userCont= null;
-		try
-		{
-			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		}
-		catch (ClassNotFoundException e)
-		{
-			out.println(_filename + (new File(_filename)).exists());
-			out.close();
-			// res.sendError(500);
-		}
-		userCont.addUser(new User(formData));
-		userCont.writeToFile(_filename);
+		// UserContainer userCont= null;
+		// try
+		// {
+		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		// }
+		// catch (ClassNotFoundException e)
+		// {
+		// out.println(_filename + (new File(_filename)).exists());
+		// out.close();
+		// // res.sendError(500);
+		// }
+		this.userCont.addUser(new User(formData));
+		// userCont.writeToFile(_filename);
 		try
 		{
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("POST~!<BR> ");
-			out.println(userCont.getUsers().toString() + "<BR>");
+			out.println(this.userCont.getUsers().toString() + "<BR>");
 			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
 			out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
 			out.println("</body></html>");
@@ -401,7 +396,6 @@ class UserContainer
 		String user= null;
 		String nextLine= null;
 		BufferedReader br= new BufferedReader(new FileReader(fileName));
-		// TODO: Test this now!
 		while ((nextLine= br.readLine()) != null)
 		{
 			user= nextLine;

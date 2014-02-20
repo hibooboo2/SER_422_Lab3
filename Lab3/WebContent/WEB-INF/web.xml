@@ -5,15 +5,15 @@
 	version="3.0">
 	<display-name>Lab3</display-name>
 	<servlet>
-		<servlet-name>ServletsTask1</servlet-name>
-		<servlet-class>ser422.lab3.ServletsTask1</servlet-class>
+		<servlet-name>UserCreationAndQuery</servlet-name>
+		<servlet-class>ser422.lab3.UserCreationAndQuery</servlet-class>
 		<init-param>
 			<param-name>userFile</param-name>
 			<param-value>/resources/userFile.save</param-value>
 		</init-param>
 	</servlet>
 	 <servlet-mapping>
-    <servlet-name>ServletsTask1</servlet-name>
-    <url-pattern>/servlet/*</url-pattern>
+    <servlet-name>UserCreationAndQuery</servlet-name>
+    <url-pattern>/Users/*</url-pattern>
   </servlet-mapping>
 </web-app>
