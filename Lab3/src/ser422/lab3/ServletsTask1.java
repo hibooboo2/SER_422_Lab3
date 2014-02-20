@@ -1,13 +1,15 @@
 
 package ser422.lab3;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -31,8 +33,7 @@ public class ServletsTask1 extends HttpServlet
 
 	private static String		_filename			= null;
 
-	UserContainer				userCont			= null;
-
+	// UserContainer userCont = null;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -51,7 +52,15 @@ public class ServletsTask1 extends HttpServlet
 
 		super.init(config);
 		_filename= config.getInitParameter("userFile");
-		this.userCont= new UserContainer(new LinkedHashSet<User>());
+		try
+		{
+			new UserContainer(new LinkedHashSet<User>()).writeToFile(_filename);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		;
 	}
 
 	/**
@@ -68,35 +77,34 @@ public class ServletsTask1 extends HttpServlet
 		response.setContentType("text/html");
 		PrintWriter out= response.getWriter();
 		Map<String,String[]> query= request.getParameterMap();
-		// TODO Make sure that this is in the right place and working. Keeps giving stream errors.
-		// UserContainer userCont= null;
-		// try
-		// {
-		// this.userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// response.sendError(500);
-		// }
+		UserContainer userCont= null;
+		try
+		{
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		}
+		catch (ClassNotFoundException e)
+		{
+			response.sendError(500);
+		}
 		LinkedHashSet<User> validUsers= null;
 		if (!query.isEmpty())
 		{
-			validUsers= this.userCont.queryUsers(query);
+			validUsers= userCont.queryUsers(query);
 		}
 		else
 		{
-			validUsers= this.userCont.getUsers();
+			validUsers= userCont.getUsers();
 		}
-		if (validUsers != null)
+		if (validUsers != null && !validUsers.isEmpty())
 		{
 			for (User u : validUsers)
 			{
-				out.println(u.toString());
+				out.println(u.toString() + "<BR>");
 			}
 		}
 		else
 		{
-			out.println("No valid Users!");
+			out.println("No valid Users!" + "<BR>");
 		}
 		try
 		{
@@ -137,7 +145,6 @@ public class ServletsTask1 extends HttpServlet
 			out.println("<input type=\"submit\" value=\"Submit\">");
 			out.println("</form></body>");
 			out.println("</html>");
-
 		}
 		finally
 		{
@@ -159,35 +166,29 @@ public class ServletsTask1 extends HttpServlet
 		res.setContentType("text/html");
 		PrintWriter out= res.getWriter();
 		Map<String,String[]> formData= req.getParameterMap();
-		// TODO This is causing http://i.imgur.com/0Qt0AVu.png why?
-
-		// TODO Keeps giving stream errors why?
-		// UserContainer userCont= null;
-		// try
-		// {
-		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// // TODO Auto-generated catch block
-		// out.println(_filename + (new File(_filename)).exists());
-		// out.close();
-		// // res.sendError(500);
-		// }
-		this.userCont.addUser(new User(formData));
-		// this.userCont.writeToFile(sc.getResource(_filename).openConnection().getOutputStream());
+		UserContainer userCont= null;
 		try
 		{
-
+			userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		}
+		catch (ClassNotFoundException e)
+		{
+			out.println(_filename + (new File(_filename)).exists());
+			out.close();
+			// res.sendError(500);
+		}
+		userCont.addUser(new User(formData));
+		userCont.writeToFile(_filename);
+		try
+		{
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("POST~!<BR> ");
-			out.println(this.userCont.getUsers().toString() + "<BR>");
+			out.println(userCont.getUsers().toString() + "<BR>");
 			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
 			out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
 			out.println("</body></html>");
-
 		}
 		finally
 		{
@@ -195,18 +196,19 @@ public class ServletsTask1 extends HttpServlet
 		}
 	}
 }
+
 class User
 {
 
-	private String			fName;
+	private String					fName;
 
-	private String			lName;
+	private String					lName;
 
-	private LinkedHashSet<String>	languages;
+	private LinkedHashSet<String>	langs;
 
 	private LinkedHashSet<String>	days;
 
-	private String			color;
+	private String					color;
 
 	/**
 	 * @param fName
@@ -221,7 +223,7 @@ class User
 		super();
 		this.fName= fName;
 		this.lName= lName;
-		this.languages= languages;
+		this.langs= languages;
 		this.days= days;
 		this.color= color;
 	}
@@ -231,12 +233,12 @@ class User
 
 		this.fName= formMap.get("firstname")[0];
 		this.lName= formMap.get("lastname")[0];
-		this.languages= new LinkedHashSet<String>();
+		this.langs= new LinkedHashSet<String>();
 		if (formMap.get("langs") != null)
 		{
 			for (int i= 0; i < formMap.get("langs").length; i++)
 			{
-				this.languages.add(formMap.get("langs")[i]);
+				this.langs.add(formMap.get("langs")[i]);
 			}
 		}
 		this.days= new LinkedHashSet<String>();
@@ -291,20 +293,20 @@ class User
 	/**
 	 * @return the languages
 	 */
-	public LinkedHashSet<String> getLanguages()
+	public LinkedHashSet<String> getLangs()
 	{
 
-		return this.languages;
+		return this.langs;
 	}
 
 	/**
-	 * @param languages
+	 * @param langs
 	 *            the languages to set
 	 */
-	public void setLanguages(LinkedHashSet<String> languages)
+	public void setLangs(LinkedHashSet<String> langs)
 	{
 
-		this.languages= languages;
+		this.langs= langs;
 	}
 
 	/**
@@ -353,8 +355,8 @@ class User
 	public String toString()
 	{
 
-		return "User [fName=" + this.fName + ", lName=" + this.lName + ", languages=" + this.languages + ", days=" + this.days + ", color="
-				+ this.color + "]";
+		return "firstname=" + this.fName + ",lastname=" + this.lName + ",langs=" + this.langs + ",days=" + this.days + ",color="
+				+ this.color;
 	}
 }
 
@@ -362,7 +364,7 @@ class UserContainer
 {
 
 	/**
-	 * @param users
+	 * @param uslers
 	 */
 	public UserContainer(LinkedHashSet<User> users)
 	{
@@ -373,27 +375,71 @@ class UserContainer
 
 	private final LinkedHashSet<User>	users;
 
-	private String			fileLocation;
-
-
-	public void writeToFile(OutputStream outputStream) throws IOException
+	public void writeToFile(String fileName) throws IOException
 	{
-		ObjectOutputStream oos= new ObjectOutputStream(outputStream);
-		oos.writeObject(this);
-		oos.close();
+
+		try
+		{
+			PrintWriter pw= new PrintWriter(new FileOutputStream(fileName));
+			for (User u : this.users)
+			{
+				pw.println(u.toString());
+			}
+			pw.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error saving users.");
+		}
 	}
 
-	public static UserContainer getContainer(InputStream inputStream) throws IOException, ClassNotFoundException
+	public static UserContainer getContainer(String fileName) throws IOException, ClassNotFoundException
 	{
-		UserContainer userCont= null;
-		InputStream fin= inputStream;
-		ObjectInputStream ois= new ObjectInputStream(fin);
-		userCont= (UserContainer) ois.readObject();
-		ois.close();
-		if (userCont == null)
+
+		UserContainer userCont= new UserContainer(new LinkedHashSet<User>());
+		String user= null;
+		String nextLine= null;
+		BufferedReader br= new BufferedReader(new FileReader(fileName));
+		// TODO: Test this now!
+		while ((nextLine= br.readLine()) != null)
 		{
-			userCont= new UserContainer(new LinkedHashSet<User>());
+			user= nextLine;
+			HashMap<String,String[]> userParsed= new HashMap<String,String[]>();
+			String[] userSplit= user.split(",");
+			String[] value= new String[1];
+			for (int i= 0; i < userSplit.length; i+= 2)
+			{
+				value[0]= userSplit[i + 1];
+				userParsed.put(userSplit[i], value);
+			}
+			userCont.addUser(new User(userParsed));
 		}
+		br.close();
+		return userCont;
+	}
+
+	public static UserContainer getContainer(InputStream input) throws IOException, ClassNotFoundException
+	{
+
+		UserContainer userCont= new UserContainer(new LinkedHashSet<User>());
+		String user= null;
+		String nextLine= null;
+		BufferedReader br= new BufferedReader(new InputStreamReader(input));
+		// TODO: Test this now!
+		while ((nextLine= br.readLine()) != null)
+		{
+			user= nextLine;
+			HashMap<String,String[]> userParsed= new HashMap<String,String[]>();
+			String[] userSplit= user.split(",");
+			for (String s : userSplit)
+			{
+				String[] nameValuesplit= s.split("=");
+				userParsed.put(nameValuesplit[0], new String[]{nameValuesplit[1]});
+			}
+			userCont.addUser(new User(userParsed));
+		}
+		br.close();
 		return userCont;
 	}
 
@@ -440,7 +486,7 @@ class UserContainer
 		String[] langsArray= langs.split(" ");
 		for (User u : this.users)
 		{
-			LinkedHashSet<String> userLangs= u.getLanguages();
+			LinkedHashSet<String> userLangs= u.getLangs();
 			for (int i= 0; i < langsArray.length; i++)
 			{
 				if (userLangs.contains(langsArray[i]))
@@ -459,9 +505,10 @@ class UserContainer
 		String[] daysArray= days.split(" ");
 		for (User u : this.users)
 		{
+			LinkedHashSet<String> userDays= u.getDays();
 			for (int i= 0; i < daysArray.length; i++)
 			{
-				if (u.getDays().contains(daysArray[i]))
+				if (userDays.contains(daysArray[i]))
 				{
 					validUsers.add(u);
 				}
@@ -522,27 +569,12 @@ class UserContainer
 			colorUsers= this.findColor(query.get("color")[0]);
 			allMatches.addAll(colorUsers);
 		}
-
 		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
-		for (User u: allMatches)
+		for (User u : allMatches)
 		{
-			if (!fNameUsers.contains(u) && query.containsKey("fName"))
-			{
-				toRemove.add(u);
-			}
-			if (!lNameUsers.contains(u) && query.containsKey("lName"))
-			{
-				toRemove.add(u);
-			}
-			if (!langsUsers.contains(u) && query.containsKey("langs"))
-			{
-				toRemove.add(u);
-			}
-			if (!daysUsers.contains(u) && query.containsKey("days"))
-			{
-				toRemove.add(u);
-			}
-			if (!colorUsers.contains(u) && query.containsKey("color"))
+			if ((query.containsKey("fName") && !fNameUsers.contains(u)) | (query.containsKey("lName") && !lNameUsers.contains(u))
+					| (query.containsKey("langs") && !langsUsers.contains(u)) | (query.containsKey("days") && !daysUsers.contains(u))
+					| (query.containsKey("color") && !colorUsers.contains(u)))
 			{
 				toRemove.add(u);
 			}
@@ -566,30 +598,7 @@ class UserContainer
 	 */
 	public void addUser(User user)
 	{
-		if (!this.users.contains(user))
-		{
-			this.users.add(user);
-		}
-	}
 
-	/**
-	 * @return the fileLocation
-	 */
-	public String getFileLocation()
-	{
-
-		return this.fileLocation;
-	}
-
-	/**
-	 * @param fileLocation
-	 *            the fileLocation to set
-	 */
-	public void setFileLocation(String fileLocation)
-	{
-
-		this.fileLocation= fileLocation;
+		this.users.add(user);
 	}
 }
-
-
