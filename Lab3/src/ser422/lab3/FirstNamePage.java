@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -103,7 +102,6 @@ public class FirstNamePage extends HttpServlet
 	{
 		if (request.getParameter("nav") != null)
 		{
-			RequestDispatcher rd= null;
 			if (request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
 			{
 				Map<String,String[]> data= request.getParameterMap();

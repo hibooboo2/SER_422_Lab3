@@ -77,14 +77,13 @@ public class LandingPage extends HttpServlet
 			for (Cookie coo : request.getCookies())
 			{
 				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
-				coo.setMaxAge(0);
-				response.addCookie(coo);
-			}
-			if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
-			{
-				this.userCont.addUser(new User(cookiesMap));
 			}
 		}
+		if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
+		{
+			this.userCont.addUser(new User(cookiesMap));
+		}
+
 		Map<String,String[]> query= request.getParameterMap();
 		// UserContainer userCont= null;
 		// try
