@@ -121,7 +121,7 @@ public class LandingPage extends HttpServlet
 			out.println("<head>");
 			out.println("<title>Lab 3 Part 2</title>");
 			out.println("</head>");
-			out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
+			out.println("<body style=\"font-family:'Trebuchet MS', Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink;\"><form method=\"post\">");
 			out.println("<h2>Landing Page</h2>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Go to form\">");
 			if (cookiesMap.get("userCreationCookiesCleared") != null)
@@ -145,6 +145,9 @@ public class LandingPage extends HttpServlet
 	{
 		if (req.getParameter("nav") != null)
 		{
+			Cookie c= new Cookie("alreadyRegisetered", "false");
+			c.setMaxAge(60 * 60 * 24 * 30);
+			res.addCookie(c);
 			if (req.getParameter("nav").equalsIgnoreCase("Go to Form"))
 			{
 				res.sendRedirect("/Lab3/firstName");
