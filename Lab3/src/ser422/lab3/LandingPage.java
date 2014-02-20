@@ -146,18 +146,8 @@ public class LandingPage extends HttpServlet
 	{
 		if (req.getParameter("nav") != null)
 		{
-			if (req.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
+			if (req.getParameter("nav").equalsIgnoreCase("Go to Form"))
 			{
-				Map<String,String[]> data= req.getParameterMap();
-				for (String name : data.keySet())
-				{
-					String valueCombined= "";
-					for (String value : data.get(name))
-					{
-						valueCombined+= value + ":";
-					}
-					res.addCookie(new Cookie(name, valueCombined));
-				}
 				res.sendRedirect("/Lab3/firstName");
 			}
 		}
