@@ -91,26 +91,29 @@ public class LangsPage extends HttpServlet
 
 		if (request.getParameter("nav") != null)
 		{
+			if (request.getCookies() != null)
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+			}
+			Map<String,String[]> data= request.getParameterMap();
+			for (String name : data.keySet())
+			{
+				String valueCombined= "";
+				for (String value : data.get(name))
+				{
+					valueCombined+= value + ":";
+				}
+				response.addCookie(new Cookie(name, valueCombined));
+			}
 			if (request.getParameter("nav").equalsIgnoreCase("Back to Username Page"))
 			{
 				response.sendRedirect("/Lab3/userName");
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Days Page"))
 			{
-				for (Cookie coo : request.getCookies())
-				{
-					response.addCookie(coo);
-				}
-				Map<String,String[]> data= request.getParameterMap();
-				for (String name : data.keySet())
-				{
-					String valueCombined= "";
-					for (String value : data.get(name))
-					{
-						valueCombined+= value + ":";
-					}
-					response.addCookie(new Cookie(name, valueCombined));
-				}
 				response.sendRedirect("/Lab3/Days");
 			}
 		}

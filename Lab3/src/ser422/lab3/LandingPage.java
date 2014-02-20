@@ -92,7 +92,9 @@ public class LandingPage extends HttpServlet
 			this.userCont.addUser(new User(cookiesMap));
 		}
 
-		if (cookiesMap.containsKey("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		if (cookiesMap.containsKey("alreadyRegisetered")
+				&& (cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true") || cookiesMap.get("alreadyRegisetered")[0]
+						.equalsIgnoreCase("dontRegister")))
 		{
 			Map<String,String[]> query= request.getParameterMap();
 			// UserContainer userCont= null;

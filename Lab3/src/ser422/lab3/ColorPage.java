@@ -67,7 +67,7 @@ public class ColorPage extends HttpServlet
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What is your favorite color?</h2>");
-			out.println("<input type=\"text\" name=\"color\"><br>");
+			out.println("<input type=\"text\" name=\"color\" value=\"none\"><br>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Days\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Submit\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Cancel\">");
