@@ -32,36 +32,53 @@ public class DaysPage extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ServletContext sc= this.getServletContext();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		PrintWriter out= response.getWriter();
-		try
+		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("To Days Page"))
 		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Lab 3 Part 2</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
-			out.println("</head>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("<h2>What days of the week you can meet?</h2>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
-			out.println("<input type=\"submit\" name=\"previous\" value=\"Previous Page\">");
-			out.println("<input type=\"submit\" value=\"Submit\">");
-			out.println("</form></body>");
-			out.println("</html>");
+			PrintWriter out= response.getWriter();
+			try
+			{
+				out.println("<!DOCTYPE html>");
+				out.println("<html>");
+				out.println("<head>");
+				out.println("<title>Lab 3 Part 2</title>");
+				out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+				out.println("</head>");
+				out.println("<body bgcolor=\"pink\"><form method=\"get\">");
+				out.println("<h2>What days of the week you can meet?</h2>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
+				out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"To Colors Page\">");
+				out.println("</form></body>");
+				out.println("</html>");
+			}
+			finally
+			{
+				out.close();
+			}
 		}
-		finally
+		else if (request.getParameter("nav") != null)
 		{
-			out.close();
+			RequestDispatcher rd= null;
+			if (request.getParameter("nav").equalsIgnoreCase("To Colors Page"))
+			{
+				rd= sc.getRequestDispatcher("/Colors");
+			}
+			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs"))
+			{
+				rd= sc.getRequestDispatcher("/langs");
+			}
+			rd.forward(request, response);
 		}
 	}
 
@@ -71,17 +88,6 @@ public class DaysPage extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext sc= this.getServletContext();
-		RequestDispatcher rd= null;
-		if (request.getParameter("previous") != null)
-		{
-			rd= sc.getRequestDispatcher("/langs");
-		}
-		else if (request.getParameter("next") != null)
-		{
-			rd= sc.getRequestDispatcher("/Colors");
-		}
-		rd.forward(request, response);
 	}
 
 }

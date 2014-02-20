@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ServletsTask1
  */
-@WebServlet("/Landing")
+@WebServlet("/landing")
 public class LandingPage extends HttpServlet
 {
 
@@ -110,35 +110,8 @@ public class LandingPage extends HttpServlet
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("<h2>Your name</h2>");
-			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
-			out.println("Last name: <input type=\"text\" name=\"lastname\">");
-			out.println("<h2>Programming languages you know</h2>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other");
-			out.println("<h2>Days of the week you can meet</h2>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday");
-			out.println("<h2>Your favorite color</h2>");
-			out.println("<input type=\"text\" name=\"color\"><br>");
-			out.println("<input type=\"submit\" value=\"Submit\">");
-			out.println("</form></body>");
+			out.println("<h2>Landing Page</h2>");
+			out.println("</body>");
 			out.println("</html>");
 		}
 		finally

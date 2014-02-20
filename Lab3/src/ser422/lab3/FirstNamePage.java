@@ -53,10 +53,11 @@ public class FirstNamePage extends HttpServlet {
 			out.println("<title>Lab 3 Part 2</title>");
 			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			out.println("<body bgcolor=\"pink\"><form method=\"get\">");
 			out.println("<h2>Enter First Name Please:</h2>");
 			out.println("<input type=\"text\" name=\"firstname\"><br>");
-			out.println("<input type=\"submit\" value=\"Submit\">");
+			out.println("<input type=\"submit\" value=\"Landing Page\">");
+			out.println("<input type=\"submit\" value=\"Next\">");
 			out.println("</form></body>");
 			out.println("</html>");
 		}
