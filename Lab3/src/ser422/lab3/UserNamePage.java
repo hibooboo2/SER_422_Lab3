@@ -3,7 +3,6 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.Servlet;
@@ -58,58 +57,28 @@ public class UserNamePage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
-		if (request.getCookies() != null)
+		for (Cookie coo : request.getCookies())
 		{
-			for (Cookie coo : request.getCookies())
-			{
-				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
-				coo.setMaxAge(0);
-				response.addCookie(coo);
-			}
+			response.addCookie(coo);
 		}
-		if (request.getCookies() == null
-				|| (cookiesMap.containsKey("alreadyRegisetered") && !cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true")))
+		PrintWriter out= response.getWriter();
+		try
 		{
-			PrintWriter out= response.getWriter();
-			try
-			{
-				out.println("<!DOCTYPE html>");
-				out.println("<html>");
-				out.println("<head>");
-				out.println("<title>Lab 3 Part 2</title>");
-				out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
-				out.println("</head>");
-				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-				out.println("<h2>Enter First Name Please:</h2>");
-				out.println("<input type=\"text\" name=\"firstname\"><br>");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"Landing Page\">");
-				out.println("<input type=\"submit\" name=\"nav\" value=\"To Last Name Page\">");
-				out.println("</form></body>");
-				out.println("</html>");
-			}
-			finally
-			{
-				out.close();
-			}
+			out.println("<!DOCTYPE html>");
+			out.println("<html>");
+			out.println("<head>");
+			out.println("<title>Enter your last name</title>");
+			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			out.println("<h2>Your last name</h2>");
+			out.println("Last name: <input type=\"text\" name=\"username\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Last Name Page\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"To Langs Page\" default>");
+			out.println("</form></body>");
+			out.println("</html>");
 		}
-		else if (cookiesMap.containsKey("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
+		finally
 		{
-			response.sendRedirect("/Lab3/");
-		}
-		else
-		{
-			if (request.getCookies() != null)
-			{
-				for (Cookie coo : request.getCookies())
-				{
-					response.addCookie(coo);
-				}
-			}
-			PrintWriter out= response.getWriter();
-			out.println(cookiesMap.get("alreadyRegisetered")[0]);
 			out.close();
-			// response.sendError(response.SC_BAD_REQUEST);
 		}
 	}
 
@@ -121,7 +90,7 @@ public class UserNamePage extends HttpServlet
 	{
 		if (request.getParameter("nav") != null)
 		{
-			if (request.getParameter("nav").equalsIgnoreCase("To Last Name Page"))
+			if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
 			{
 				Map<String,String[]> data= request.getParameterMap();
 				for (String name : data.keySet())
@@ -133,11 +102,11 @@ public class UserNamePage extends HttpServlet
 					}
 					response.addCookie(new Cookie(name, valueCombined));
 				}
-				response.sendRedirect("/Lab3/lastName");
+				response.sendRedirect("/Lab3/langs");
 			}
-			else if (request.getParameter("nav").equalsIgnoreCase("Landing Page"))
+			else if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))
 			{
-				response.sendRedirect("/Lab3/");
+				response.sendRedirect("/Lab3/lastName");
 			}
 		}
 
