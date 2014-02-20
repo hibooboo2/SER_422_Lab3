@@ -126,6 +126,10 @@ public class LandingPage extends HttpServlet
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Landing Page</h2>");
+			if (cookiesMap.get("userCreationCookiesCleared") != null)
+			{
+				out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
+			}
 			out.println("</body>");
 			out.println("</html>");
 		}

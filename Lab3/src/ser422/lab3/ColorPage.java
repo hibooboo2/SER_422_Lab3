@@ -45,9 +45,16 @@ public class ColorPage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		for (Cookie coo : request.getCookies())
+		try
 		{
-			response.addCookie(coo);
+			for (Cookie coo : request.getCookies())
+			{
+				response.addCookie(coo);
+			}
+		}
+		catch (NullPointerException e)
+		{
+			response.sendError(response.SC_BAD_REQUEST);
 		}
 		PrintWriter out= response.getWriter();
 		try
@@ -63,6 +70,7 @@ public class ColorPage extends HttpServlet
 			out.println("<input type=\"text\" name=\"color\"><br>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Days\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Submit\">");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Cancel\">");
 			out.println("</form></body>");
 			out.println("</html>");
 		}
@@ -79,34 +87,48 @@ public class ColorPage extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-
-		if (request.getParameter("nav") != null && request.getParameter("nav").equalsIgnoreCase("Back To Days"))
-		{
-			if (request.getParameter("nav").equalsIgnoreCase("Back To Days"))
+		if (request.getParameter("nav") != null ) {
+			if ( request.getParameter("nav").equalsIgnoreCase("Back To Days"))
 			{
-				response.sendRedirect("/Lab3/Days");
-			}
-		}
-		else
-		{
-			for (Cookie coo : request.getCookies())
-			{
-				response.addCookie(coo);
-			}
-			Map<String,String[]> data= request.getParameterMap();
-			for (String name : data.keySet())
-			{
-				String valueCombined= "";
-				for (String value : data.get(name))
+				if (request.getParameter("nav").equalsIgnoreCase("Back To Days"))
 				{
-					valueCombined+= value + ":";
+					response.sendRedirect("/Lab3/Days");
 				}
-				response.addCookie(new Cookie(name, valueCombined));
 			}
-			response.addCookie(new Cookie("action", "adduser"));
-			response.sendRedirect("/Lab3/");
+			else if (request.getParameter("nav").equalsIgnoreCase("Submit"))
+			{
+				for (Cookie coo : request.getCookies())
+				{
+					response.addCookie(coo);
+				}
+				Map<String,String[]> data= request.getParameterMap();
+				for (String name : data.keySet())
+				{
+					String valueCombined= "";
+					for (String value : data.get(name))
+					{
+						valueCombined+= value + ":";
+					}
+					response.addCookie(new Cookie(name, valueCombined));
+				}
+				response.addCookie(new Cookie("action", "adduser"));
+				response.sendRedirect("/Lab3/");
+			}
+			else if (request.getParameter("nav").equalsIgnoreCase("Cancel"))
+			{
+				if (request.getCookies() != null)
+				{
+					for (Cookie coo : request.getCookies())
+					{
+						coo.setMaxAge(0);
+						response.addCookie(coo);
+					}
+				}
+				response.addCookie(new Cookie("userCreationCookiesCleared", "true"));
+				response.sendRedirect("/Lab3/");
+			}
+
+
 		}
-
-
 	}
 }
