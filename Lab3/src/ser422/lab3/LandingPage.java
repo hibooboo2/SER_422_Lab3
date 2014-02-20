@@ -2,7 +2,6 @@
 package ser422.lab3;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -122,10 +121,10 @@ public class LandingPage extends HttpServlet
 			out.println("<html>");
 			out.println("<head>");
 			out.println("<title>Lab 3 Part 2</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
 			out.println("</head>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+			out.println("<body style=\"font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif;font-size:12pt;background-color:pink\"><form method=\"post\">");
 			out.println("<h2>Landing Page</h2>");
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Go to form\">");
 			if (cookiesMap.get("userCreationCookiesCleared") != null)
 			{
 				out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
@@ -146,41 +145,44 @@ public class LandingPage extends HttpServlet
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 
-		ServletContext sc= this.getServletContext();
-		res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.addHeader("Pragma", "no-cache");
-		res.setDateHeader("Expires", -1);
-		res.setContentType("text/html");
-		PrintWriter out= res.getWriter();
-		Map<String,String[]> formData= req.getParameterMap();
-		// UserContainer userCont= null;
-		// try
-		// {
-		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// out.println(_filename + (new File(_filename)).exists());
-		// out.close();
-		// // res.sendError(500);
-		// }
-		this.userCont.addUser(new User(formData));
-		// userCont.writeToFile(_filename);
-		try
-		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("POST~!<BR> ");
-			out.println(this.userCont.getUsers().toString() + "<BR>");
-			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
-			out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
-			out.println("</body></html>");
-		}
-		finally
-		{
-			out.close();
-		}
+		res.sendRedirect("/Lab3/firstName");
+		/*
+		 * ServletContext sc= this.getServletContext();
+		 * res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		 * res.addHeader("Pragma", "no-cache");
+		 * res.setDateHeader("Expires", -1);
+		 * res.setContentType("text/html");
+		 * PrintWriter out= res.getWriter();
+		 * Map<String,String[]> formData= req.getParameterMap();
+		 * // UserContainer userCont= null;
+		 * // try
+		 * // {
+		 * // userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+		 * // }
+		 * // catch (ClassNotFoundException e)
+		 * // {
+		 * // out.println(_filename + (new File(_filename)).exists());
+		 * // out.close();
+		 * // // res.sendError(500);
+		 * // }
+		 * this.userCont.addUser(new User(formData));
+		 * // userCont.writeToFile(_filename);
+		 * try
+		 * {
+		 * out.println("<!DOCTYPE html>");
+		 * out.println("<html>");
+		 * out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+		 * out.println("POST~!<BR> ");
+		 * out.println(this.userCont.getUsers().toString() + "<BR>");
+		 * out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
+		 * out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
+		 * out.println("</body></html>");
+		 * }
+		 * finally
+		 * {
+		 * out.close();
+		 * }
+		 */
 	}
 }
 
