@@ -17,14 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/lastName")
 public class LastNamePage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LastNamePage() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LastNamePage() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,8 +63,8 @@ public class LastNamePage extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext sc= getServletContext();
-		RequestDispatcher rd= sc.getRequestDispatcher("/LangsPage");
+		ServletContext sc= this.getServletContext();
+		RequestDispatcher rd= sc.getRequestDispatcher("/langs");
 		rd.forward(request, response);
 	}
 
