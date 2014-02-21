@@ -220,15 +220,18 @@ class User
 	public User(Map<String,String[]> formMap)
 	{
 
-		if (formMap.containsKey("username") && formMap.get("username")[0] != null)
+		if (formMap.containsKey("username") && (formMap.get("username") != null) && formMap.get("username").length > 0)
 		{
-			this.userName= formMap.get("username")[0];
+			if (formMap.get("username").length > 0)
+			{
+				this.userName= formMap.get("username")[0];
+			}
 		}
 		else
 		{
 			this.userName= "";
 		}
-		if (formMap.containsKey("firstname") && formMap.get("firstname")[0] != null)
+		if (formMap.containsKey("firstname") && formMap.get("firstname") != null && formMap.get("firstname").length > 0)
 		{
 			this.fName= formMap.get("firstname")[0];
 		}
@@ -236,7 +239,7 @@ class User
 		{
 			this.fName= "";
 		}
-		if (formMap.containsKey("lastname") && formMap.get("lastname")[0] != null)
+		if (formMap.containsKey("lastname") && formMap.get("lastname")[0] != null && formMap.get("lastname").length > 0)
 		{
 			this.lName= formMap.get("lastname")[0];
 		}
@@ -260,7 +263,7 @@ class User
 				this.days.add(formMap.get("days")[i]);
 			}
 		}
-		if (formMap.containsKey("color") && formMap.get("color")[0] != null)
+		if (formMap.containsKey("color") && formMap.get("color")[0] != null && formMap.get("color").length > 0)
 		{
 			this.color= formMap.get("color")[0];
 		}
