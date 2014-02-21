@@ -100,6 +100,20 @@ public class LandingPage extends HttpServlet
 						.equalsIgnoreCase("dontRegister")))
 		{
 			Map<String,String[]> query= request.getParameterMap();
+			LinkedHashSet<String> validParams = new LinkedHashSet<String>();
+			validParams.add("username");
+			validParams.add("lastname");
+			validParams.add("firstname");
+			validParams.add("days");
+			validParams.add("color");
+			validParams.add("langs");
+			boolean validQueryParams= true;
+			for (String param:query.keySet()) {
+				if (!validParams.contains(param))
+				{
+					validQueryParams= false;
+				}
+			}
 			// UserContainer userCont= null;
 			// try
 			// {
@@ -119,16 +133,24 @@ public class LandingPage extends HttpServlet
 			{
 				validUsers= this.userCont.getUsers();
 			}
-			if (validUsers != null && !validUsers.isEmpty())
+			if (validUsers != null && !validUsers.isEmpty() && validQueryParams)
 			{
 				for (User u : validUsers)
 				{
 					out.println(u.toString() + "<BR>");
 				}
 			}
+			else if (!validQueryParams)
+			{
+				response.sendError(
+						HttpServletResponse.SC_BAD_REQUEST,
+						"Query invalid query attributes.Seperate attributes with a & and seperate attribute"
+								+ " values with + Valid attributes are : firstname lastname username"
+								+ " color days langs Ex: ?firstname=james+bob&color=green");
+			}
 			else
 			{
-				out.println("No valid Users!" + "<BR>");
+				out.println("No users matching Query!" + "<BR>");
 			}
 			try
 			{
@@ -250,6 +272,7 @@ class User
 				this.userName= formMap.get("username")[0];
 			}
 		}
+
 		else
 		{
 			this.userName= "";
@@ -650,14 +673,14 @@ class UserContainer
 			userNameUsers= this.findUserName(query.get("username")[0]);
 			allMatches.addAll(userNameUsers);
 		}
-		if (query.containsKey("fname"))
+		if (query.containsKey("firstname"))
 		{
-			fNameUsers= this.findFname(query.get("fname")[0]);
+			fNameUsers= this.findFname(query.get("firstname")[0]);
 			allMatches.addAll(fNameUsers);
 		}
-		if (query.containsKey("lname"))
+		if (query.containsKey("lastname"))
 		{
-			lNameUsers= this.findLname(query.get("lname")[0]);
+			lNameUsers= this.findLname(query.get("lastname")[0]);
 			allMatches.addAll(lNameUsers);
 		}
 		if (query.containsKey("langs"))
