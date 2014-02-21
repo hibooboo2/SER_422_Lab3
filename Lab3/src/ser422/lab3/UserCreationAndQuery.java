@@ -107,7 +107,14 @@ public class UserCreationAndQuery extends HttpServlet
 			out.println("<html>");
 			out.println("<head>");
 			out.println("<title>Lab 3 Part 1</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
+			if (request.getHeader("User-Agent").indexOf("Mobile") != -1)
+			{
+				out.println("<style>body{font-size:8pt;}</style>");
+			}
+			else
+			{
+				out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, Tahoma, sans-serif; font-size:12pt;}</style>");
+			}
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your name</h2>");
