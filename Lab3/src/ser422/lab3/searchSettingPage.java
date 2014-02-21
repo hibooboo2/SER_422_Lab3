@@ -119,6 +119,6 @@ public class searchSettingPage extends HttpServlet
 			newqueryString+= "&";
 		}
 		response.addCookie(new Cookie("search", newqueryString));
-		response.sendRedirect("/Lab3/");
+		response.sendRedirect(request.getContextPath() + "/");
 	}
 }

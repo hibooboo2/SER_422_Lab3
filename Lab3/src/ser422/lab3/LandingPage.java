@@ -204,7 +204,7 @@ public class LandingPage extends HttpServlet
 		else
 		{
 			response.addCookie(new Cookie("alreadyRegisetered", "starting"));
-			response.sendRedirect("/Lab3/firstName");
+			response.sendRedirect(request.getContextPath() + "/firstName");
 		}
 	}
 
@@ -219,7 +219,7 @@ public class LandingPage extends HttpServlet
 			res.addCookie(new Cookie("alreadyRegisetered", "false"));
 			if (req.getParameter("nav").equalsIgnoreCase("Not you?"))
 			{
-				res.sendRedirect("/Lab3/firstName");
+				res.sendRedirect(req.getContextPath() + "/firstName");
 			}
 			else if (req.getParameter("nav").equalsIgnoreCase("Clear Cookies!"))
 			{
@@ -228,7 +228,7 @@ public class LandingPage extends HttpServlet
 					coo.setMaxAge(0);
 					res.addCookie(coo);
 				}
-				res.sendRedirect("/Lab3/");
+				res.sendRedirect(req.getContextPath() + "/");
 			}
 		}
 	}

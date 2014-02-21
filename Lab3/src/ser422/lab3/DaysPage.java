@@ -156,11 +156,11 @@ public class DaysPage extends HttpServlet {
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Colors Page"))
 			{
-				response.sendRedirect("/Lab3/Colors");
+				response.sendRedirect(request.getContextPath() + "/Colors");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Back To Langs Page"))
 			{
-				response.sendRedirect("/Lab3/langs");
+				response.sendRedirect(request.getContextPath() + "/langs");
 			}
 		}
 	}

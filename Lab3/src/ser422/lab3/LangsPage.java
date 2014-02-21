@@ -198,11 +198,11 @@ public class LangsPage extends HttpServlet
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("Back to Username Page"))
 			{
-				response.sendRedirect("/Lab3/userName");
+				response.sendRedirect(request.getContextPath() + "/userName");
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Days Page"))
 			{
-				response.sendRedirect("/Lab3/Days");
+				response.sendRedirect(request.getContextPath() + "/Days");
 			}
 		}
 

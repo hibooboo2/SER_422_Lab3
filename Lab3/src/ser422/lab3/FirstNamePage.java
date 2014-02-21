@@ -105,7 +105,7 @@ public class FirstNamePage extends HttpServlet
 		}
 		else if (cookiesMap.containsKey("alreadyRegisetered") && cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true"))
 		{
-			response.sendRedirect("/Lab3/");
+			response.sendRedirect(request.getContextPath() + "/");
 		}
 		else
 		{
@@ -151,7 +151,7 @@ public class FirstNamePage extends HttpServlet
 					response.addCookie(new Cookie(name, valueCombined));
 				}
 				response.addCookie(new Cookie("alreadyRegisetered", "registering"));
-				response.sendRedirect("/Lab3/lastName");
+				response.sendRedirect(request.getContextPath() + "/lastName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Don't register, go to Landing Page"))
 			{
@@ -168,7 +168,7 @@ public class FirstNamePage extends HttpServlet
 				}
 				Cookie cookie= new Cookie("alreadyRegisetered", "dontRegister");
 				response.addCookie(cookie);
-				response.sendRedirect("/Lab3/");
+				response.sendRedirect(request.getContextPath() + "/");
 			}
 		}
 

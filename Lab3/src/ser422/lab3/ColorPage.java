@@ -119,7 +119,7 @@ public class ColorPage extends HttpServlet
 						}
 						response.addCookie(new Cookie(name, valueCombined));
 					}
-					response.sendRedirect("/Lab3/Days");
+					response.sendRedirect(request.getContextPath() + "/Days");
 				}
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Submit"))
@@ -143,7 +143,7 @@ public class ColorPage extends HttpServlet
 				}
 				response.addCookie(new Cookie("alreadyRegisetered", "true"));
 				response.addCookie(new Cookie("action", "adduser:"));
-				response.sendRedirect("/Lab3/");
+				response.sendRedirect(request.getContextPath() + "/");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Cancel"))
 			{
@@ -156,7 +156,7 @@ public class ColorPage extends HttpServlet
 					}
 				}
 				response.addCookie(new Cookie("userCreationCookiesCleared", "true:"));
-				response.sendRedirect("/Lab3/");
+				response.sendRedirect(request.getContextPath() + "/");
 			}
 
 

@@ -112,11 +112,11 @@ public class LastNamePage extends HttpServlet {
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("Back to First Name Page"))
 			{
-				response.sendRedirect("/Lab3/firstName");
+				response.sendRedirect(request.getContextPath() + "/firstName");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("To Username Page"))
 			{
-				response.sendRedirect("/Lab3/userName");
+				response.sendRedirect(request.getContextPath() + "/userName");
 			}
 		}
 

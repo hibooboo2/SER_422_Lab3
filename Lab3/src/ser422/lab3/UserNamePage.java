@@ -129,11 +129,11 @@ public class UserNamePage extends HttpServlet
 			}
 			if (request.getParameter("nav").equalsIgnoreCase("To Langs Page"))
 			{
-				response.sendRedirect("/Lab3/langs");
+				response.sendRedirect(request.getContextPath() + "/langs");
 			}
 			else if (request.getParameter("nav").equalsIgnoreCase("Back to Last Name Page"))
 			{
-				response.sendRedirect("/Lab3/lastName");
+				response.sendRedirect(request.getContextPath() + "/lastName");
 			}
 		}
 
