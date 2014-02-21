@@ -419,8 +419,8 @@ class User
 	public String toString()
 	{
 
-		return "firstname=" + this.fName + ",lastname=" + this.lName + ",langs=" + this.langs + ",days=" + this.days + ",color="
-				+ this.color;
+		return "firstname=" + this.fName + ",lastname=" + this.lName + ",username=" + this.userName + ",langs=" + this.langs + ",days="
+				+ this.days + ",color=" + this.color;
 	}
 
 	/**
