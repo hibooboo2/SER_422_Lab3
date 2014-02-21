@@ -125,10 +125,15 @@ public class LandingPage extends HttpServlet
 			// }
 
 			LinkedHashSet<User> validUsers= null;
-			if (!query.isEmpty())
+			if (!query.isEmpty() && !cookiesMap.containsKey("search"))
 			{
 				validUsers= this.userCont.queryUsers(query);
 			}
+			// TODO Implement Custom Search Preferences.
+			// else if (!cookiesMap.containsKey("search") && cookiesMap.get("search").length > 0)
+			// {
+			// validUsers= this.userCont.queryUsers(cookiesMap.get("search")[0]);
+			// }
 			else
 			{
 				validUsers= this.userCont.getUsers();
@@ -711,6 +716,21 @@ class UserContainer
 		}
 		allMatches.removeAll(toRemove);
 		return allMatches;
+	}
+
+	public LinkedHashSet<User> queryUsers(String query)
+	{
+
+		HashMap<String,String[]> queryMap= new HashMap<String,String[]>();
+		for (String attributeValuePair : query.split("&"))
+		{
+			String[] attributeValuePairSplit= attributeValuePair.split("=");
+			for(int i =0; i<attributeValuePairSplit.length;i+=2 )
+			{
+				queryMap.put(attributeValuePairSplit[i], attributeValuePairSplit[i + 1].split("+"));
+			}
+		}
+		return null;
 	}
 
 	/**

@@ -162,11 +162,12 @@ public class FirstNamePage extends HttpServlet
 						if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
 						{
 							coo.setMaxAge(0);
+							response.addCookie(coo);
 						}
-						response.addCookie(coo);
 					}
 				}
-				response.addCookie(new Cookie("alreadyRegisetered", "dontRegister"));
+				Cookie cookie= new Cookie("alreadyRegisetered", "dontRegister");
+				response.addCookie(cookie);
 				response.sendRedirect("/Lab3/");
 			}
 		}
