@@ -54,7 +54,14 @@ public class LangsPage extends HttpServlet
 			out.println("<html>");
 			out.println("<head>");
 			out.println("<title>Lab 3 Langs Page</title>");
-			out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
+			if (request.getHeader("User-Agent").indexOf("Mobile") != -1)
+			{
+				out.println("<style>body{font-size:8pt}</style>");
+			}
+			else
+			{
+				out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
+			}
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What programming languages you know?</h2>");
