@@ -137,6 +137,7 @@ public class LandingPage extends HttpServlet
 				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Landing Page</h2>");
 				out.println("Welcome back " + request.getAttribute("username"));
+				out.println(" <script>function myFunction(){confirm(\"Press a button!\");}</script>");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
 				if (cookiesMap.get("userCreationCookiesCleared") != null)
@@ -239,7 +240,7 @@ class User
 		{
 			this.fName= "";
 		}
-		if (formMap.containsKey("lastname") && formMap.get("lastname")[0] != null && formMap.get("lastname").length > 0)
+		if (formMap.containsKey("lastname") && formMap.get("lastname") != null && formMap.get("lastname").length > 0)
 		{
 			this.lName= formMap.get("lastname")[0];
 		}
@@ -263,7 +264,7 @@ class User
 				this.days.add(formMap.get("days")[i]);
 			}
 		}
-		if (formMap.containsKey("color") && formMap.get("color")[0] != null && formMap.get("color").length > 0)
+		if (formMap.containsKey("color") && formMap.get("color") != null && formMap.get("color").length > 0)
 		{
 			this.color= formMap.get("color")[0];
 		}
