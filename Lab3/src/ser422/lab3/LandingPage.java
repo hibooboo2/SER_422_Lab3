@@ -151,7 +151,6 @@ public class LandingPage extends HttpServlet
 				out.println("</head>");
 				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Landing Page</h2>");
-<<<<<<< HEAD
 				if (cookiesMap.containsKey("username") && cookiesMap.get("username").length > 0)
 				{
 					out.println("Welcome back " + cookiesMap.get("username")[0]);
@@ -161,9 +160,6 @@ public class LandingPage extends HttpServlet
 					out.println("Welcome Anonymous");
 				}
 				out.println(" <script>function myFunction(){confirm(\"Press a button!\");}</script>");
-=======
-				out.println("Welcome back " + request.getAttribute("username"));
->>>>>>> 245ebe00460f9bcb99c380e89bfbad2b5bc75519
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
 				if (cookiesMap.get("userCreationCookiesCleared") != null)
