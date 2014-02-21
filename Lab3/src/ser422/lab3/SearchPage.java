@@ -61,14 +61,30 @@ public class SearchPage extends HttpServlet
 			}
 			out.println("</head>");
 			out.println("<body>");
-			out.println("Programming languages: " + query.get("langs"));
-			out.println("Days I can meet: " + query.get("days"));
+			if (query.get("langs").length != 0 && query.get("days").length != 0)
+			{
+				out.println("Programming languages: " + query.get("langs")[0]);
+				out.println("Days I can meet: " + query.get("days")[0]);
+			}
+			out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Landing Page\">");
 			out.println("</body>");
 			out.println("</html>");
 		}
 		finally
 		{
 			out.close();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		if (request.getParameter("nav").equalsIgnoreCase("Don't register, go to Landing Page"))
+		{
+			response.sendRedirect("/Lab3/");
 		}
 	}
 }
