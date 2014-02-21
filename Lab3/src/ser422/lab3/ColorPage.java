@@ -3,6 +3,7 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -45,16 +46,14 @@ public class ColorPage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		try
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
+		if (request.getCookies() != null)
 		{
 			for (Cookie coo : request.getCookies())
 			{
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
 				response.addCookie(coo);
 			}
-		}
-		catch (NullPointerException e)
-		{
-			response.sendError(response.SC_BAD_REQUEST);
 		}
 		PrintWriter out= response.getWriter();
 		try
@@ -74,7 +73,14 @@ public class ColorPage extends HttpServlet
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What is your favorite color?</h2>");
-			out.println("<input type=\"text\" name=\"color\" value=\"none\"><br>");
+			if (cookiesMap.containsKey("color") && cookiesMap.get("color").length > 0)
+			{
+				out.println("<input type=\"text\" name=\"color\" value=\"" + cookiesMap.get("color")[0] + "\"><br>");
+			}
+			else
+			{
+				out.println("<input type=\"text\" name=\"color\" value=\"none\"><br>");
+			}
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Days\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Submit\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Cancel\">");

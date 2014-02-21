@@ -3,6 +3,8 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -43,9 +45,14 @@ public class LangsPage extends HttpServlet
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		for (Cookie coo : request.getCookies())
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
+		if (request.getCookies() != null)
 		{
-			response.addCookie(coo);
+			for (Cookie coo : request.getCookies())
+			{
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
+				response.addCookie(coo);
+			}
 		}
 		PrintWriter out= response.getWriter();
 		try
@@ -65,21 +72,95 @@ public class LangsPage extends HttpServlet
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What programming languages you know?</h2>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other<br>");
+			LinkedHashSet<String> langsChosen= new LinkedHashSet<String>();
+			if (cookiesMap.containsKey("langs") && cookiesMap.get("langs").length > 0)
+			{
+				for (int i= 0; i < cookiesMap.get("langs").length; i++)
+				{
+					langsChosen.add(cookiesMap.get("langs")[i]);
+				}
+			}
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\"");
+			if (langsChosen.contains("java"))
+			{
+				out.println("checked");
+			}
+			out.println(">Java<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\"");
+			if (langsChosen.contains("c"))
+			{
+				out.println("checked");
+			}
+			out.println(">C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\"");
+			if (langsChosen.contains("cpp"))
+			{
+				out.println("checked");
+			}
+			out.println(">C++<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\"");
+			if (langsChosen.contains("objc"))
+			{
+				out.println("checked");
+			}
+			out.println(">Objective-C<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\"");
+			if (langsChosen.contains("csharp"))
+			{
+				out.println("checked");
+			}
+			out.println(">C#<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\"");
+			if (langsChosen.contains("php"))
+			{
+				out.println("checked");
+			}
+			out.println(">PHP<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\"");
+			if (langsChosen.contains("perl"))
+			{
+				out.println("checked");
+			}
+			out.println(">Perl<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\"");
+			if (langsChosen.contains("python"))
+			{
+				out.println("checked");
+			}
+			out.println(">Python<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\"");
+			if (langsChosen.contains("js"))
+			{
+				out.println("checked");
+			}
+			out.println(">JavaScript<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\"");
+			if (langsChosen.contains("scala"))
+			{
+				out.println("checked");
+			}
+			out.println(">Scala<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\"");
+			if (langsChosen.contains("scheme"))
+			{
+				out.println("checked");
+			}
+			out.println(">Scheme<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\"");
+			if (langsChosen.contains("prolog"))
+			{
+				out.println("checked");
+			}
+			out.println(">Prolog<br>");
+			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\"");
+			if (langsChosen.contains("otherlang"))
+			{
+				out.println("checked");
+			}
+			out.println(">Other<br>");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to Username Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Days Page\">");
+
 			out.println("</form></body>");
 			out.println("</html>");
 		}

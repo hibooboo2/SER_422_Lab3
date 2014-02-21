@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -52,8 +51,6 @@ public class FirstNamePage extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-
-		ServletContext sc= this.getServletContext();
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
@@ -64,7 +61,6 @@ public class FirstNamePage extends HttpServlet
 			for (Cookie coo : request.getCookies())
 			{
 				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
-				coo.setMaxAge(0);
 				response.addCookie(coo);
 			}
 		}
@@ -89,7 +85,14 @@ public class FirstNamePage extends HttpServlet
 				out.println("</head>");
 				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Enter First Name Please:</h2>");
-				out.println("<input type=\"text\" name=\"firstname\"><br>");
+				if (cookiesMap.containsKey("firstname") && cookiesMap.get("firstname").length > 0)
+				{
+					out.println("First Name:<input type=\"text\" name=\"firstname\" value=\"" + cookiesMap.get("firstname")[0] + "\"><br>");
+				}
+				else
+				{
+					out.println("First Name: <input type=\"text\" name=\"firstname\"><br>");
+				}
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Don't register, go to Landing Page\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"To Last Name Page\">");
 				out.println("</form></body>");
@@ -112,11 +115,11 @@ public class FirstNamePage extends HttpServlet
 				{
 					response.addCookie(coo);
 				}
+				PrintWriter out= response.getWriter();
+				out.println(cookiesMap.get("alreadyRegisetered")[0]);
+				out.close();
+				// response.sendError(response.SC_BAD_REQUEST);
 			}
-			PrintWriter out= response.getWriter();
-			out.println(cookiesMap.get("alreadyRegisetered")[0]);
-			out.close();
-			// response.sendError(response.SC_BAD_REQUEST);
 		}
 	}
 

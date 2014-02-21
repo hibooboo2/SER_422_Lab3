@@ -2,6 +2,7 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -38,10 +39,12 @@ public class LastNamePage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
 		if (request.getCookies() != null)
 		{
 			for (Cookie coo : request.getCookies())
 			{
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
 				response.addCookie(coo);
 			}
 		}
@@ -63,7 +66,14 @@ public class LastNamePage extends HttpServlet {
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>Your last name</h2>");
-			out.println("Last Name: <input type=\"text\" name=\"lastname\"><br>");
+			if (cookiesMap.containsKey("lastname") && cookiesMap.get("lastname").length > 0)
+			{
+				out.println("Last Name: <input type=\"text\" name=\"lastname\" value=\"" + cookiesMap.get("lastname")[0] + "\"><br>");
+			}
+			else
+			{
+				out.println("Last Name: <input type=\"text\" name=\"lastname\"><br>");
+			}
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back to First Name Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Username Page\" default>");
 			out.println("</form></body>");

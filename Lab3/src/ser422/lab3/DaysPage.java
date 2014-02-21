@@ -2,6 +2,8 @@ package ser422.lab3;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -38,9 +40,14 @@ public class DaysPage extends HttpServlet {
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
-		for (Cookie coo : request.getCookies())
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
+		if (request.getCookies() != null)
 		{
-			response.addCookie(coo);
+			for (Cookie coo : request.getCookies())
+			{
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
+				response.addCookie(coo);
+			}
 		}
 		PrintWriter out= response.getWriter();
 		try
@@ -60,13 +67,57 @@ public class DaysPage extends HttpServlet {
 			out.println("</head>");
 			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 			out.println("<h2>What days of the week you can meet?</h2>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday<br>");
+			LinkedHashSet<String> daysChoosen= new LinkedHashSet<String>();
+			if (cookiesMap.containsKey("days") && cookiesMap.get("days").length > 0)
+			{
+				for (int i= 0; i < cookiesMap.get("days").length; i++)
+				{
+					daysChoosen.add(cookiesMap.get("days")[i]);
+				}
+			}
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\"");
+			if (daysChoosen.contains("sun"))
+			{
+				out.println("checked");
+			}
+			out.println(">Sunday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\"");
+			if (daysChoosen.contains("mon"))
+			{
+				out.println("checked");
+			}
+			out.println(">Monday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\"");
+			if (daysChoosen.contains("tue"))
+			{
+				out.println("checked");
+			}
+			out.println(">Tuesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\"");
+			if (daysChoosen.contains("wed"))
+			{
+				out.println("checked");
+			}
+			out.println(">Wednesday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\"");
+			if (daysChoosen.contains("thu"))
+			{
+				out.println("checked");
+			}
+			out.println(">Thursday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\"");
+			if (daysChoosen.contains("fri"))
+			{
+				out.println("checked");
+			}
+			out.println(">Friday<br>");
+			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\"");
+			if (daysChoosen.contains("sat"))
+			{
+				out.println("checked");
+			}
+			out.println(">Saturday<br>");
+
 			out.println("<input type=\"submit\" name=\"nav\" value=\"Back To Langs Page\">");
 			out.println("<input type=\"submit\" name=\"nav\" value=\"To Colors Page\">");
 			out.println("</form></body>");
