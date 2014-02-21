@@ -2,7 +2,6 @@
 package ser422.lab3;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,9 +14,9 @@ import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ServletsTask1
  */
-@WebServlet("/ServletsTask1")
-public class UserCreationAndQuery extends HttpServlet
+@WebServlet("/")
+public class LandingPage extends HttpServlet
 {
 
 	private static final long	serialVersionUID	= 1L;
@@ -39,7 +38,7 @@ public class UserCreationAndQuery extends HttpServlet
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserCreationAndQuery()
+	public LandingPage()
 	{
 
 		super();
@@ -65,85 +64,147 @@ public class UserCreationAndQuery extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 
-		ServletContext sc= this.getServletContext();
+
 		response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.addHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", -1);
 		response.setContentType("text/html");
 		PrintWriter out= response.getWriter();
-		Map<String,String[]> query= request.getParameterMap();
-		// UserContainer userCont= null;
-		// try
-		// {
-		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// response.sendError(500);
-		// }
-		LinkedHashSet<User> validUsers= null;
-		if (!query.isEmpty())
+		Map<String,String[]> cookiesMap= new HashMap<String,String[]>();
+		if (request.getCookies() != null)
 		{
-			validUsers= this.userCont.queryUsers(query);
-		}
-		else
-		{
-			validUsers= this.userCont.getUsers();
-		}
-		if (validUsers != null && !validUsers.isEmpty())
-		{
-			for (User u : validUsers)
+			for (Cookie coo : request.getCookies())
 			{
-				out.println(u.toString() + "<BR>");
+				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
+			}
+		}
+		boolean userAdded= false;
+		if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
+		{
+			for (Cookie coo : request.getCookies())
+			{
+				if (!coo.getName().equalsIgnoreCase("alreadyRegisetered"))
+				{
+					coo.setMaxAge(0);
+				}
+				response.addCookie(coo);
+			}
+			if (this.userCont.addUser(new User(cookiesMap)))
+			{
+				userAdded= true;
+			}
+		}
+
+		if (cookiesMap.containsKey("alreadyRegisetered")
+				&& (cookiesMap.get("alreadyRegisetered")[0].equalsIgnoreCase("true") || cookiesMap.get("alreadyRegisetered")[0]
+						.equalsIgnoreCase("dontRegister")))
+		{
+			Map<String,String[]> query= request.getParameterMap();
+			LinkedHashSet<String> validParams = new LinkedHashSet<String>();
+			validParams.add("username");
+			validParams.add("lastname");
+			validParams.add("firstname");
+			validParams.add("days");
+			validParams.add("color");
+			validParams.add("langs");
+			boolean validQueryParams= true;
+			for (String param:query.keySet()) {
+				if (!validParams.contains(param))
+				{
+					validQueryParams= false;
+				}
+			}
+			// UserContainer userCont= null;
+			// try
+			// {
+			// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
+			// }
+			// catch (ClassNotFoundException e)
+			// {
+			// response.sendError(500);
+			// }
+
+			LinkedHashSet<User> validUsers= null;
+			if (!query.isEmpty() && !cookiesMap.containsKey("search"))
+			{
+				validUsers= this.userCont.queryUsers(query);
+			}
+			// TODO Implement Custom Search Preferences.
+			// else if (!cookiesMap.containsKey("search") && cookiesMap.get("search").length > 0)
+			// {
+			// validUsers= this.userCont.queryUsers(cookiesMap.get("search")[0]);
+			// }
+			else
+			{
+				validUsers= this.userCont.getUsers();
+			}
+			if (validUsers != null && !validUsers.isEmpty() && validQueryParams)
+			{
+				for (User u : validUsers)
+				{
+					out.println(u.toString() + "<BR>");
+				}
+			}
+			else if (!validQueryParams)
+			{
+				response.sendError(
+						HttpServletResponse.SC_BAD_REQUEST,
+						"Query invalid query attributes.Seperate attributes with a & and seperate attribute"
+								+ " values with + Valid attributes are : firstname lastname username"
+								+ " color days langs Ex: ?firstname=james+bob&color=green");
+			}
+			else
+			{
+				out.println("No users matching Query!" + "<BR>");
+			}
+			try
+			{
+				out.println("<!DOCTYPE html>");
+				out.println("<html>");
+				out.println("<head>");
+				if (userAdded)
+				{
+					out.println(" <script>confirm(\"User Successfully Added!\");</script>");
+				}
+				out.println("<title>Lab 3 Part 2</title>");
+				if (request.getHeader("User-Agent").indexOf("Mobile") != -1)
+				{
+					out.println("<style>body{font-size:8pt}</style>");
+				}
+				else
+				{
+					out.println("<style>body{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif; font-size:12pt}</style>");
+				}
+				out.println("</head>");
+				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
+				out.println("<h2>Landing Page</h2>");
+				if (cookiesMap.containsKey("username") && cookiesMap.get("username").length > 0)
+				{
+					out.println("Welcome back " + cookiesMap.get("username")[0]);
+				}
+				else
+				{
+					out.println("Welcome Anonymous");
+				}
+				out.println(" <script>function myFunction(){confirm(\"Press a button!\");}</script>");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
+				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
+				if (cookiesMap.get("userCreationCookiesCleared") != null)
+				{
+					out.println("Cookies for making new user Cleared! Creating new User has been canceled.");
+				}
+				out.println("</body>");
+				out.println("</html>");
+			}
+			finally
+			{
+				out.close();
 			}
 		}
 		else
 		{
-			out.println("No valid Users!" + "<BR>");
-		}
-		try
-		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Lab 3 Part 1</title>");
-			out.println("<style>{font-family:\"Trebuchet MS\", Calibri, Verdana, sans-serif;}</style>");
-			out.println("</head>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("<h2>Your name</h2>");
-			out.println("First name: <input type=\"text\" name=\"firstname\"><br>");
-			out.println("Last name: <input type=\"text\" name=\"lastname\">");
-			out.println("<h2>Programming languages you know</h2>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"java\">Java<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"c\">C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"cpp\">C++<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"objc\">Objective-C<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"csharp\">C#<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"php\">PHP<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"perl\">Perl<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"python\">Python<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"js\">JavaScript<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scala\">Scala<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"scheme\">Scheme<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"prolog\">Prolog<br>");
-			out.println("<input type=\"checkbox\" name=\"langs\" value=\"otherlang\">Other");
-			out.println("<h2>Days of the week you can meet</h2>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sun\">Sunday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"mon\">Monday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"tue\">Tuesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"wed\">Wednesday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"thu\">Thursday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"fri\">Friday<br>");
-			out.println("<input type=\"checkbox\" name=\"days\" value=\"sat\">Saturday");
-			out.println("<h2>Your favorite color</h2>");
-			out.println("<input type=\"text\" name=\"color\"><br>");
-			out.println("<input type=\"submit\" value=\"Submit\">");
-			out.println("</form></body>");
-			out.println("</html>");
-		}
-		finally
-		{
-			out.close();
+			response.addCookie(new Cookie("alreadyRegisetered", "starting"));
+			response.sendRedirect(request.getContextPath() + "/firstName");
 		}
 	}
 
@@ -153,41 +214,22 @@ public class UserCreationAndQuery extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
-
-		ServletContext sc= this.getServletContext();
-		res.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.addHeader("Pragma", "no-cache");
-		res.setDateHeader("Expires", -1);
-		res.setContentType("text/html");
-		PrintWriter out= res.getWriter();
-		Map<String,String[]> formData= req.getParameterMap();
-		// UserContainer userCont= null;
-		// try
-		// {
-		// userCont= UserContainer.getContainer(sc.getResourceAsStream(_filename));
-		// }
-		// catch (ClassNotFoundException e)
-		// {
-		// out.println(_filename + (new File(_filename)).exists());
-		// out.close();
-		// // res.sendError(500);
-		// }
-		this.userCont.addUser(new User(formData));
-		// userCont.writeToFile(_filename);
-		try
+		if (req.getParameter("nav") != null)
 		{
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<body bgcolor=\"pink\"><form method=\"post\">");
-			out.println("POST~!<BR> ");
-			out.println(this.userCont.getUsers().toString() + "<BR>");
-			out.println(_filename + "<BR>" + (new File(_filename)).exists() + "<BR>");
-			out.println("<a href=\"" + req.getHeader("referer") + "\"/>Back to Form!</a>");
-			out.println("</body></html>");
-		}
-		finally
-		{
-			out.close();
+			res.addCookie(new Cookie("alreadyRegisetered", "false"));
+			if (req.getParameter("nav").equalsIgnoreCase("Not you?"))
+			{
+				res.sendRedirect(req.getContextPath() + "/firstName");
+			}
+			else if (req.getParameter("nav").equalsIgnoreCase("Clear Cookies!"))
+			{
+				for (Cookie coo : req.getCookies())
+				{
+					coo.setMaxAge(0);
+					res.addCookie(coo);
+				}
+				res.sendRedirect(req.getContextPath() + "/");
+			}
 		}
 	}
 }
@@ -195,6 +237,7 @@ public class UserCreationAndQuery extends HttpServlet
 class User
 {
 
+	private String					userName;
 	private String					fName;
 
 	private String					lName;
@@ -212,10 +255,11 @@ class User
 	 * @param days
 	 * @param color
 	 */
-	public User(String fName, String lName, LinkedHashSet<String> languages, LinkedHashSet<String> days, String color)
+	public User(String userName, String fName, String lName, LinkedHashSet<String> languages, LinkedHashSet<String> days, String color)
 	{
 
 		super();
+		this.userName= userName;
 		this.fName= fName;
 		this.lName= lName;
 		this.langs= languages;
@@ -226,8 +270,34 @@ class User
 	public User(Map<String,String[]> formMap)
 	{
 
-		this.fName= formMap.get("firstname")[0];
-		this.lName= formMap.get("lastname")[0];
+		if (formMap.containsKey("username") && (formMap.get("username") != null) && formMap.get("username").length > 0)
+		{
+			if (formMap.get("username").length > 0)
+			{
+				this.userName= formMap.get("username")[0];
+			}
+		}
+
+		else
+		{
+			this.userName= "";
+		}
+		if (formMap.containsKey("firstname") && formMap.get("firstname") != null && formMap.get("firstname").length > 0)
+		{
+			this.fName= formMap.get("firstname")[0];
+		}
+		else
+		{
+			this.fName= "";
+		}
+		if (formMap.containsKey("lastname") && formMap.get("lastname") != null && formMap.get("lastname").length > 0)
+		{
+			this.lName= formMap.get("lastname")[0];
+		}
+		else
+		{
+			this.lName= "";
+		}
 		this.langs= new LinkedHashSet<String>();
 		if (formMap.get("langs") != null)
 		{
@@ -244,8 +314,35 @@ class User
 				this.days.add(formMap.get("days")[i]);
 			}
 		}
-		this.color= formMap.get("color")[0];
+		if (formMap.containsKey("color") && formMap.get("color") != null && formMap.get("color").length > 0)
+		{
+			this.color= formMap.get("color")[0];
+		}
+		else
+		{
+			this.color= "";
+		}
 	}
+
+	public User(Cookie[] userCookies)
+	{
+		this(User.parseCookiesToMap(userCookies));
+	}
+
+	/**
+	 * @param userCookies
+	 * @return
+	 */
+	private static Map<String,String[]> parseCookiesToMap(Cookie[] userCookies)
+	{
+		Map<String,String[]> formMap= new HashMap<String,String[]>();
+		for (Cookie coo : userCookies)
+		{
+			formMap.put(coo.getName(), coo.getValue().split(":"));
+		}
+		return formMap;
+	}
+
 
 	/**
 	 * @return the fName
@@ -350,8 +447,27 @@ class User
 	public String toString()
 	{
 
-		return "firstname=" + this.fName + ",lastname=" + this.lName + ",langs=" + this.langs + ",days=" + this.days + ",color="
-				+ this.color;
+		return "firstname=" + this.fName + ",lastname=" + this.lName + ",username=" + this.userName + ",langs=" + this.langs + ",days="
+				+ this.days + ",color=" + this.color;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName()
+	{
+
+		return this.userName;
+	}
+
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName)
+	{
+
+		this.userName= userName;
 	}
 }
 
@@ -435,6 +551,24 @@ class UserContainer
 		}
 		br.close();
 		return userCont;
+	}
+
+	public LinkedHashSet<User> findUserName(String userName)
+	{
+
+		LinkedHashSet<User> matchedUsers= new LinkedHashSet<User>();
+		String[] userNameArray= userName.split(" ");
+		for (User u : this.users)
+		{
+			for (int i= 0; i < userNameArray.length; i++)
+			{
+				if (u.getUserName().equalsIgnoreCase(userNameArray[i]))
+				{
+					matchedUsers.add(u);
+				}
+			}
+		}
+		return matchedUsers;
 	}
 
 	public LinkedHashSet<User> findFname(String fName)
@@ -533,19 +667,25 @@ class UserContainer
 	{
 
 		LinkedHashSet<User> allMatches= new LinkedHashSet<User>();
+		LinkedHashSet<User> userNameUsers= null;
 		LinkedHashSet<User> fNameUsers= null;
 		LinkedHashSet<User> lNameUsers= null;
 		LinkedHashSet<User> langsUsers= null;
 		LinkedHashSet<User> daysUsers= null;
 		LinkedHashSet<User> colorUsers= null;
-		if (query.containsKey("fName"))
+		if (query.containsKey("username"))
 		{
-			fNameUsers= this.findFname(query.get("fName")[0]);
+			userNameUsers= this.findUserName(query.get("username")[0]);
+			allMatches.addAll(userNameUsers);
+		}
+		if (query.containsKey("firstname"))
+		{
+			fNameUsers= this.findFname(query.get("firstname")[0]);
 			allMatches.addAll(fNameUsers);
 		}
-		if (query.containsKey("lName"))
+		if (query.containsKey("lastname"))
 		{
-			lNameUsers= this.findLname(query.get("lName")[0]);
+			lNameUsers= this.findLname(query.get("lastname")[0]);
 			allMatches.addAll(lNameUsers);
 		}
 		if (query.containsKey("langs"))
@@ -566,7 +706,8 @@ class UserContainer
 		LinkedHashSet<User> toRemove= new LinkedHashSet<User>();
 		for (User u : allMatches)
 		{
-			if ((query.containsKey("fName") && !fNameUsers.contains(u)) | (query.containsKey("lName") && !lNameUsers.contains(u))
+			if ((query.containsKey("userName") && !userNameUsers.contains(u)) | (query.containsKey("fName") && !fNameUsers.contains(u))
+					| (query.containsKey("lName") && !lNameUsers.contains(u))
 					| (query.containsKey("langs") && !langsUsers.contains(u)) | (query.containsKey("days") && !daysUsers.contains(u))
 					| (query.containsKey("color") && !colorUsers.contains(u)))
 			{
@@ -575,6 +716,21 @@ class UserContainer
 		}
 		allMatches.removeAll(toRemove);
 		return allMatches;
+	}
+
+	public LinkedHashSet<User> queryUsers(String query)
+	{
+
+		HashMap<String,String[]> queryMap= new HashMap<String,String[]>();
+		for (String attributeValuePair : query.split("&"))
+		{
+			String[] attributeValuePairSplit= attributeValuePair.split("=");
+			for(int i =0; i<attributeValuePairSplit.length;i+=2 )
+			{
+				queryMap.put(attributeValuePairSplit[i], attributeValuePairSplit[i + 1].split("+"));
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -589,10 +745,19 @@ class UserContainer
 	/**
 	 * @param user
 	 *            add User to the list of users.
+	 * @return
 	 */
-	public void addUser(User user)
+	public boolean addUser(User user)
 	{
 
-		this.users.add(user);
+		if (this.findUserName(user.getUserName()).isEmpty())
+		{
+			this.users.add(user);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
