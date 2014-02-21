@@ -78,6 +78,7 @@ public class LandingPage extends HttpServlet
 				cookiesMap.put(coo.getName(), coo.getValue().split(":"));
 			}
 		}
+		boolean userAdded= false;
 		if (cookiesMap.containsKey("action") && cookiesMap.get("action")[0].equalsIgnoreCase("adduser"))
 		{
 			for (Cookie coo : request.getCookies())
@@ -88,7 +89,10 @@ public class LandingPage extends HttpServlet
 				}
 				response.addCookie(coo);
 			}
-			this.userCont.addUser(new User(cookiesMap));
+			if (this.userCont.addUser(new User(cookiesMap)))
+			{
+				userAdded= true;
+			}
 		}
 
 		if (cookiesMap.containsKey("alreadyRegisetered")
@@ -131,6 +135,10 @@ public class LandingPage extends HttpServlet
 				out.println("<!DOCTYPE html>");
 				out.println("<html>");
 				out.println("<head>");
+				if (userAdded)
+				{
+					out.println(" <script>confirm(\"User Successfully Added!\");</script>");
+				}
 				out.println("<title>Lab 3 Part 2</title>");
 				if (request.getHeader("User-Agent").indexOf("Mobile") != -1)
 				{
@@ -143,6 +151,7 @@ public class LandingPage extends HttpServlet
 				out.println("</head>");
 				out.println("<body bgcolor=\"pink\"><form method=\"post\">");
 				out.println("<h2>Landing Page</h2>");
+<<<<<<< HEAD
 				if (cookiesMap.containsKey("username") && cookiesMap.get("username").length > 0)
 				{
 					out.println("Welcome back " + cookiesMap.get("username")[0]);
@@ -152,6 +161,9 @@ public class LandingPage extends HttpServlet
 					out.println("Welcome Anonymous");
 				}
 				out.println(" <script>function myFunction(){confirm(\"Press a button!\");}</script>");
+=======
+				out.println("Welcome back " + request.getAttribute("username"));
+>>>>>>> 245ebe00460f9bcb99c380e89bfbad2b5bc75519
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Not you?\">");
 				out.println("<input type=\"submit\" name=\"nav\" value=\"Clear Cookies!\">");
 				if (cookiesMap.get("userCreationCookiesCleared") != null)
@@ -694,13 +706,19 @@ class UserContainer
 	/**
 	 * @param user
 	 *            add User to the list of users.
+	 * @return
 	 */
-	public void addUser(User user)
+	public boolean addUser(User user)
 	{
 
 		if (this.findUserName(user.getUserName()).isEmpty())
 		{
 			this.users.add(user);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 }
