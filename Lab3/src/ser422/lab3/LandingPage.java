@@ -220,18 +220,27 @@ class User
 	public User(Map<String,String[]> formMap)
 	{
 
-		this.userName= formMap.get("username")[0];
-		if (this.userName == null)
+		if (formMap.containsKey("username") && formMap.get("username")[0] != null)
+		{
+			this.userName= formMap.get("username")[0];
+		}
+		else
 		{
 			this.userName= "";
 		}
-		this.fName= formMap.get("firstname")[0];
-		if (this.fName == null)
+		if (formMap.containsKey("firstname") && formMap.get("firstname")[0] != null)
+		{
+			this.fName= formMap.get("firstname")[0];
+		}
+		else
 		{
 			this.fName= "";
 		}
-		this.lName= formMap.get("lastname")[0];
-		if (this.lName == null)
+		if (formMap.containsKey("lastname") && formMap.get("lastname")[0] != null)
+		{
+			this.lName= formMap.get("lastname")[0];
+		}
+		else
 		{
 			this.lName= "";
 		}
@@ -251,8 +260,11 @@ class User
 				this.days.add(formMap.get("days")[i]);
 			}
 		}
-		this.color= formMap.get("color")[0];
-		if (this.color == null)
+		if (formMap.containsKey("color") && formMap.get("color")[0] != null)
+		{
+			this.color= formMap.get("color")[0];
+		}
+		else
 		{
 			this.color= "";
 		}
